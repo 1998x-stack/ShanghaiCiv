@@ -241,7 +241,7 @@ def check_synthetic_world(workspace: Path, *, write_report: bool = True) -> dict
 
 
 def benchmark_grid_sizes(bbox: tuple[float, float, float, float],
-                         radii_m: tuple[int, ...] = (250, 500, 1000)) -> list[dict]:
+                         radii_m: tuple[int, ...] = (500, 1000, 2000)) -> list[dict]:
     """Compare *candidate synthetic grid counts*, not real Shanghai area/error."""
     xmin, ymin, xmax, ymax = bbox
     if not all(math.isfinite(v) for v in bbox) or xmin >= xmax or ymin >= ymax:
