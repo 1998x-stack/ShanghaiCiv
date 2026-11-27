@@ -149,6 +149,12 @@
 
 ---
 
+## P04 实施进展（2026-11-27）
+
+已建立 synthetic-only GIS 实现：[空间算法与实现说明](GIS_P04.md)；含本地投影适配、Polygon/MultiPolygon holes、六边形面积叠合、离岛/水域与 partial cell、格网视窗索引。**需以最新 CI 完成后才能记为 G4 synthetic ENGINEERING PASS**。真实上海 16 区几何与地图审核仍在 [Issue #3](https://github.com/1998x-stack/ShanghaiCiv/issues/3) 等待正式授权，不允许发布生产 world.json。
+
+---
+
 ## P04｜16 区边界、海岛、水体和六边形 GIS 核心
 
 **目标**：建立上海独立的可信世界坐标模型。**投入级别**：XL（5–10 工程日，依合法几何数据可得性变化）。**负责人**：GIS。
