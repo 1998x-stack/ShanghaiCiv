@@ -151,3 +151,17 @@ select{width:100%;appearance:none;border:1px solid #455d5b;background:#213744;co
   .map-column{height:100dvh;min-height:0}
   .map-viewport{min-height:0}
 }
+
+/* P09 original synthetic procedural art controls. */
+.art-controls{padding-top:18px;border-top:1px solid #365760}
+.art-controls .control-label{margin-top:14px}
+.art-controls .toggle-row{margin:12px 0}
+.legend-dot.art{background:#9db989;border-radius:50%}
+.legend-dot.zone{border:2px solid #d9c58b;transform:rotate(45deg);border-radius:2px}
+.art-controls .art-zone-label{margin-top:15px}
+.art-info{margin:12px 0 9px;font-size:10px;line-height:1.75;color:#e9d3a6;
+  padding:10px;background:#3e3728;border-left:2px solid #d0b279;border-radius:3px}
+.art-state{color:#a4c9b7;font:10px/1.65 ui-monospace,SFMono-Regular,monospace;
+  word-wrap:break-word;border-top:1px solid #38555a;margin-top:12px;padding-top:10px}
+.art-gallery-link{display:inline-block;margin-top:10px;color:#e1d4a9;font-size:11px}
+@media(max-width:650px){.art-controls{display:block}.art-controls .toggle-row{display:flex}}

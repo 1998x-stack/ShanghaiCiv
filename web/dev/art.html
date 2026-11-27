@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>ShanghaiCiv · P09 原创合成地图美术画廊</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Noto Sans SC",sans-serif;background:#0e202c;color:#edf0e8}
+    *{box-sizing:border-box}body{margin:0;padding:30px max(16px,calc((100vw - 1220px)/2))}
+    a{color:#abcfba}header{padding-bottom:22px;border-bottom:1px solid #36545b}
+    .kicker{font-size:11px;letter-spacing:.16em;color:#bbd4b8;font-weight:700}
+    h1{font-family:Georgia,serif;font-size:30px;margin:8px 0}h1 small{color:#c0cabc;font-size:14px;font-weight:400}
+    .warning{margin:17px 0;border-left:3px solid #d4b17b;background:#3b3227;padding:15px;color:#f6ddb1;font-size:13px;line-height:1.8}
+    .intro{font-size:13px;line-height:1.8;color:#b6c9c3}
+    .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:26px}
+    .panel{border:1px solid #4e6964;border-radius:13px;background:#19323d;overflow:hidden}
+    .panel-info{display:flex;align-items:baseline;justify-content:space-between;padding:13px 16px;gap:12px}
+    h2{font-size:17px;margin:0;color:#f1e5c8}.panel-info small{font-size:11px;color:#becac0}
+    canvas{display:block;width:100%;height:300px;background:#1c3342}
+    .metrics{padding:11px 16px;border-top:1px solid #4a6565;color:#b8ccbd;font:11px/1.6 ui-monospace,monospace}
+    .notes{margin-top:28px;color:#b4c7bc;font-size:12px;line-height:1.8}
+    .focus{outline:3px solid #dfca96}
+    @media(max-width:750px){.gallery{grid-template-columns:1fr}canvas{height:240px}h1{font-size:25px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="kicker">P09 · ORIGINAL VECTOR ART LABORATORY</div>
+    <h1>程序化地图美术画廊 <small>4 LEVELS OF DETAIL</small></h1>
+    <p class="intro">四种细节级别、同一固定种子、同一人工设计的虚构地理场景。装饰元素仅是程序化艺术效果，不表示真实树木、建筑或设施。</p>
+    <p class="warning"><strong>FICTIONAL / SYNTHETIC ONLY</strong> · 完全虚构区域、河流和岛屿。非上海地图；不是陆家嘴、张江、虹桥、临港的真实坐标或统计。地图发布和数据再利用许可 G1 仍 BLOCKED。</p>
+    <a href="synthetic-map.html">返回合成地图交互原型</a>
+  </header>
+  <div id="gallery-error" role="alert" hidden>合成美术样本读取失败。</div>
+  <div class="gallery" id="gallery" data-ready="false">
+    <section class="panel" data-lod="overview">
+      <div class="panel-info"><h2>01 · 远景 Overview</h2><small>15 px / hex</small></div>
+      <canvas id="art-overview" aria-label="纯合成远景地图示意"></canvas>
+      <div id="stats-overview" class="metrics">等待画面生成…</div>
+    </section>
+    <section class="panel" data-lod="regional">
+      <div class="panel-info"><h2>02 · 中景 Regional</h2><small>35 px / hex</small></div>
+      <canvas id="art-regional" aria-label="纯合成中景地图示意"></canvas>
+      <div id="stats-regional" class="metrics">等待画面生成…</div>
+    </section>
+    <section class="panel" data-lod="local">
+      <div class="panel-info"><h2>03 · 近景 Local</h2><small>70 px / hex</small></div>
+      <canvas id="art-local" aria-label="纯合成近景地图示意"></canvas>
+      <div id="stats-local" class="metrics">等待画面生成…</div>
+    </section>
+    <section class="panel" data-lod="detail">
+      <div class="panel-info"><h2>04 · 局部 Detail</h2><small>125 px / hex</small></div>
+      <canvas id="art-detail" aria-label="纯合成局部细节地图示意"></canvas>
+      <div id="stats-detail" class="metrics">等待画面生成…</div>
+    </section>
+  </div>
+  <p class="notes">原创矢量图形、固定种子 xorshift32、按可见格裁剪、160 项容量限制的 LRU 描述符缓存。下方展示实际绘制单元与缓存命中数。此画廊仅服务合成原型验收，不代表生产地图性能结果。</p>
+  <script type="module" src="../js/app/art-gallery.mjs"></script>
+</body>
+</html>

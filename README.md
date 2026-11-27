@@ -17,6 +17,15 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 **P03 工程验收记录**：[G3 验收报告](docs/release/P03_G3_ACCEPTANCE.md)，[GitHub Actions #45949933769](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45949933769) 已通过。范围仅合成数据离线 ETL，真实 GIS 和地图发布仍阻塞。
 
+## P09 程序化地图美术与四级 LOD（合成工程验收通过）
+
+- [P09/G5c 实际 CI 验收报告](docs/release/P09_G5C_SYNTHETIC_ACCEPTANCE.md) · [P09 Chromium 截图与运行记录](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45958368284)。
+
+- [独立四级美术画廊](web/dev/art.html) · [P09 美术引擎与测试说明](docs/ART_P09.md) · [设计规范](docs/STYLE_GUIDE.md)。
+- 画廊可在仓库根目录运行 `python -m http.server 8765 --bind 127.0.0.1` 后，通过 `http://127.0.0.1:8765/web/dev/art.html` 打开。
+- 固定种子生成虚构陆地/水体艺术细节，按视窗剔除单元，采用有容量上限的 LRU 缓存与四档 LOD；可聚焦四类**完全虚构**功能标签。
+- **真实上海地图与四个真实功能区位置尚未接入**；P01/G1 许可及审图门禁保持 BLOCKED。
+
 ## P08 合成专题与 Almanac 来源百科（工程验收通过）
 
 - [P08/G5b 合成验收报告](docs/release/P08_G5B_SYNTHETIC_ACCEPTANCE.md)，包含真实浏览器和 P02/P03/P04/P07 回归证据。

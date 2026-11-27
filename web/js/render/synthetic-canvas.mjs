@@ -1,4 +1,5 @@
 /** Canvas 2D renderer. All shapes originate from entirely fictional P04 fixture. */
+import {renderArt} from "./art/art-layer.mjs";
 
 function polygonPath(ctx,pts,camera) {
   if(!pts.length)return;
@@ -56,7 +57,7 @@ function renderDistrictThematic(ctx,camera,scene,lensView) {
   ctx.restore();
 }
 
-export function renderBase(ctx,camera,coverage,scene,layers,lensView=null) {
+export function renderBase(ctx,camera,coverage,scene,layers,lensView=null,art=null) {
   ctx.clearRect(0,0,camera.width,camera.height);
   const bg=ctx.createLinearGradient(0,0,camera.width,camera.height);
   bg.addColorStop(0,"#111f2c");bg.addColorStop(1,"#1d3040");
@@ -93,6 +94,7 @@ export function renderBase(ctx,camera,coverage,scene,layers,lensView=null) {
       strokeFeature(ctx,feature.geometry,camera);
       ctx.setLineDash([]);
     }
+    if(!art?.session) {
     ctx.font="600 13px system-ui, sans-serif";
     ctx.textAlign="center";ctx.textBaseline="middle";
     for(const [text,x,y] of [["虚构甲区",1000,1100],["虚构乙区",5400,1150],["虚构离岛",4800,3900]]) {
@@ -103,8 +105,10 @@ export function renderBase(ctx,camera,coverage,scene,layers,lensView=null) {
       ctx.beginPath();ctx.roundRect(sx-width/2,sy-12,width,24,6);ctx.fill();
       ctx.fillStyle="#f0ebd7";ctx.fillText(text,sx,sy);
     }
+    }
   }
-  return {visibleCells:visible.length,totalCells:grid.size};
+  const artStats=art?.session?renderArt(ctx,camera,coverage,scene,art.session,art.options??{}):null;
+  return {visibleCells:visible.length,totalCells:grid.size,art:artStats};
 }
 
 export function renderOverlay(ctx,camera,coverage,{hovered,selected}) {
