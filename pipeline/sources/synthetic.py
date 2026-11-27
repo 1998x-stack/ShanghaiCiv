@@ -46,15 +46,14 @@ class FixtureSource(Source):
         source_bytes = self.fixture.read_bytes()
         source_sha = sha256(source_bytes)
         dest, manifest_path = self.raw(workspace), self.manifest(workspace, "raw")
-        if dest.exists() or manifest_path.exists():
+        if (dest.exists() or manifest_path.exists()) and not force:
             if not (dest.exists() and manifest_path.exists()):
                 raise ValueError("PARTIAL_CACHE")
             m = read_json(manifest_path)
             read_verified(dest, m.get("sha256", ""))
-            if source_sha != m.get("sha256") and not force:
+            if source_sha != m.get("sha256"):
                 raise ValueError("CACHE_OUTDATED_REQUIRE_FORCE")
-            if source_sha == m.get("sha256") and not force:
-                return dest
+            return dest
         atomic_write(dest, source_bytes)
         write_json(manifest_path, {
             "schema_version": 1, "source_id": self.info.source_id,
