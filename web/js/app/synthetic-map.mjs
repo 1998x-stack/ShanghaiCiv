@@ -322,7 +322,7 @@ async function main() {
       $("region-search").append(option);
     }
     fitScene(false);
-    restoreHash();updateInspector();schedule(true);
+    restoreHash();refreshThematic();schedule(true);
     root.dataset.ready="true";
     status("已载入 "+coverage.grid.size+" 个虚构格网单元");
   } catch(error) {
