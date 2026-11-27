@@ -15,7 +15,9 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 剩余外部事项：[#3 地图使用与审核](https://github.com/1998x-stack/ShanghaiCiv/issues/3) · [#4 统计使用许可与工业差额](https://github.com/1998x-stack/ShanghaiCiv/issues/4) · [#5 公共开放平台具体POI数据](https://github.com/1998x-stack/ShanghaiCiv/issues/5)。
 
-## P03 离线数据流水线（合成源工程基线）
+**P03 工程验收记录**：[G3 验收报告](docs/release/P03_G3_ACCEPTANCE.md)，[GitHub Actions #45949933769](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45949933769) 已通过。范围仅合成数据离线 ETL，真实 GIS 和地图发布仍阻塞。
+
+## P03 离线数据流水线## P03 离线数据流水线（合成源工程基线）
 
 - [P03 流水线设计与运行](docs/ETL_PIPELINE.md) · [合成数据质量检查](pipeline/check.py) · [Source 接口](pipeline/core/source.py) · [Builder DAG](pipeline/build/graph.py)
 - 离线完整构建：`python -m pipeline all --offline --workspace .p03-work`
