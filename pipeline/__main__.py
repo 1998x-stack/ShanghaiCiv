@@ -13,12 +13,20 @@ import sys
 from pathlib import Path
 
 from pipeline.build.bundles import build_bundles
+from pipeline.build.spatial import build_synthetic_world, check_synthetic_world, benchmark_grid_sizes
 from pipeline.check import check_workspace
 from pipeline.sources.synthetic import registered_sources
 
 
 def run(command: str, *, workspace: Path, offline: bool = True,
         force: bool = False) -> dict:
+    if command == "spatial":
+        return build_synthetic_world(workspace)
+    if command == "spatial-check":
+        return check_synthetic_world(workspace)
+    if command == "spatial-benchmark":
+        return {"status": "PASS", "mode": "synthetic_only",
+                "radii": benchmark_grid_sizes((-1000, -700, 8000, 5200))}
     sources = registered_sources()
     if command == "list":
         return {"status": "PASS", "sources": [
@@ -42,7 +50,7 @@ def run(command: str, *, workspace: Path, offline: bool = True,
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="ShanghaiCiv source-to-static-data pipeline")
-    parser.add_argument("command", choices=["list", "fetch", "process", "build", "check", "all"])
+    parser.add_argument("command", choices=["list", "fetch", "process", "build", "check", "all", "spatial", "spatial-check", "spatial-benchmark"])
     parser.add_argument("--workspace", type=Path, default=Path(".p03-work"),
                         help="Isolated raw/interim/build/reports working directory")
     parser.add_argument("--offline", action="store_true", default=True,
