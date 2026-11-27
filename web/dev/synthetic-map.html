@@ -146,6 +146,55 @@
       <div id="membership-list" class="membership-list">尚未选择单元。</div>
       <div class="meta-heading">空间标签</div>
       <div id="cell-tags" class="cell-tags"><span class="tag">Synthetic</span></div>
+      <section class="explorer-section" aria-label="合成区际 Explorer">
+        <div class="section-kicker">P10 · DISTRICT EXPLORER</div>
+        <h2>区际对比与数据探索</h2>
+        <p class="explorer-warning"><strong>SYNTHETIC ONLY</strong> · 只有两个虚构行政区、2024/2025 两年模拟数据。下表不是上海实际统计或 16 区排行。</p>
+        <p class="explorer-year" id="explorer-year">与左侧专题同步：2024（虚构数据）</p>
+        <div class="explorer-control-grid">
+          <label for="explorer-sort">排序指标</label>
+          <select id="explorer-sort" aria-label="Explorer 排序指标">
+            <option value="population">虚构人口</option>
+            <option value="population_density">虚构人口密度</option>
+          </select>
+          <label for="explorer-direction">排序方向</label>
+          <select id="explorer-direction" aria-label="Explorer 排序方向">
+            <option value="desc">从高到低</option>
+            <option value="asc">从低到高</option>
+          </select>
+        </div>
+        <div id="explorer-rank" class="explorer-rank" aria-live="polite"></div>
+        <p id="explorer-counts" class="explorer-counts">等待数据校验。</p>
+        <div class="meta-heading">两区同年对比</div>
+        <div class="explorer-control-grid">
+          <label for="explorer-left">左侧区域</label>
+          <select id="explorer-left" aria-label="比较左侧虚构区"></select>
+          <label for="explorer-right">右侧区域</label>
+          <select id="explorer-right" aria-label="比较右侧虚构区"></select>
+          <label for="explorer-compare-metric">比较指标</label>
+          <select id="explorer-compare-metric" aria-label="比较统计指标">
+            <option value="population">虚构人口</option>
+            <option value="population_density">虚构人口密度</option>
+          </select>
+        </div>
+        <div id="explorer-comparison" class="explorer-comparison" role="status" aria-live="polite">等待选择区域。</div>
+        <div class="meta-heading">人口 × 人口密度 · 区级散点</div>
+        <div id="explorer-scatter" class="explorer-scatter"></div>
+        <div class="meta-heading">指标来源与口径</div>
+        <div id="explorer-audit" class="explorer-audit">请先选择虚构行政区。</div>
+        <div class="explorer-export">
+          <button type="button" id="explorer-download" class="outline-btn">
+            导出 SYNTHETIC 测试 CSV
+          </button>
+          <p id="explorer-download-status" role="status" aria-live="polite">
+            仅允许明确带假数据警告的合成测试 CSV；真实统计数据生产导出 BLOCKED。
+          </p>
+        </div>
+        <div class="meta-heading">第三个研究案例：产业结构</div>
+        <p id="explorer-industry-empty" class="explorer-empty">
+          暂无可比较的区级产业结构数据。园区工业模拟指数不能作为行政区产业规模或结构。
+        </p>
+      </section>
       <section class="almanac-section" aria-label="虚构区域统计与来源百科">
         <div class="section-kicker">ALMANAC · AUDIT TRAIL</div>
         <h2>统计与来源百科</h2>

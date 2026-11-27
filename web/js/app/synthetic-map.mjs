@@ -6,6 +6,8 @@ import {renderLensLegend,renderAlmanac} from "./almanac-ui.mjs";
 import {createArtSession} from "../render/art/art-layer.mjs";
 import {SYNTHETIC_ZONES,assertSyntheticZones} from "../render/art/zones.mjs";
 import {LOD_LEVELS} from "../render/art/lod.mjs";
+import {buildExplorerView,syntheticCSV,EXPLORER_METRICS} from "../explorer.mjs";
+import {renderExplorerTable,renderExplorerScatter,renderExplorerCompare,renderExplorerAudit} from "./explorer-ui.mjs";
 
 const $=id=>document.getElementById(id);
 const root=$("app"),viewport=$("map-viewport");
@@ -21,6 +23,43 @@ const vintageUrls=Object.fromEntries(SUPPORTED_PERIODS.map(year=>[
 ]));
 let scene=null,coverage=null,selected=null,hovered=null,drag=null;
 let bundles=null,activeYear="2024",activeLens="lens-population",regionFocus=null;
+let explorerSort="population",explorerDirection="desc";
+let explorerLeft=null,explorerRight=null,explorerCompareMetric="population";
+function explorerView(){
+  return bundles&&scene?
+    buildExplorerView(bundles,scene,activeYear,explorerSort,explorerDirection):null;
+}
+function selectedExplorerRegion(){
+  if(selected===null||!coverage)return null;
+  const members=[...(coverage.byCell.get(selected)||[])].sort((a,b)=>b.fraction-a.fraction);
+  return members.find(m=>m.region_id===regionFocus)?.region_id??members[0]?.region_id??null;
+}
+function focusExplorerRegion(regionId){
+  if(!scene?.regions.some(r=>r.id===regionId)||!coverage)return;
+  const candidates=coverage.memberships
+    .filter(m=>m.region_id===regionId)
+    .sort((a,b)=>b.fraction-a.fraction||a.cell_id-b.cell_id);
+  if(!candidates.length)return;
+  const id=candidates[0].cell_id;
+  const [col,row]=coverage.grid.colRow(id);
+  const [x,y]=coverage.grid.center(col,row);
+  selected=id;regionFocus=regionId;
+  camera.centerX=x;camera.centerY=y;
+  camera.scale=Math.min(camera.maxScale,Math.max(camera.minScale,.16));
+  updateInspector();schedule(true);saveHash();
+}
+function refreshExplorer(){
+  const view=explorerView();
+  if(!view)return;
+  const focus=selectedExplorerRegion();
+  $("explorer-year").textContent="与左侧专题同步："+view.period+" 年（虚构数据）";
+  renderExplorerTable($("explorer-rank"),view,focus,focusExplorerRegion);
+  renderExplorerScatter($("explorer-scatter"),view,focus,focusExplorerRegion);
+  renderExplorerCompare($("explorer-comparison"),view,explorerLeft,explorerRight,explorerCompareMetric);
+  renderExplorerAudit($("explorer-audit"),view,focus??explorerLeft,explorerCompareMetric);
+  $("explorer-counts").textContent="可排序 "+view.completeCount+" 个区 · "+
+    "缺失 "+view.missingCount+" 个区 · 缺失值置末，不记为 0";
+}
 function currentLensView() {
   if(!bundles||!scene||activeLens==="none")return null;
   const lens=lensCatalog(bundles).find(l=>l.id===activeLens);
@@ -56,6 +95,10 @@ function saveHash() {
   p.set("art",artOptions.decorations?"1":"0");
   p.set("zones",artOptions.zones?"1":"0");
   p.set("lod",artOptions.lodOverride);
+  p.set("sort",explorerSort);p.set("order",explorerDirection);
+  p.set("left",explorerLeft??"");p.set("right",explorerRight??"");
+  p.set("compare",explorerCompareMetric);
+  if(regionFocus)p.set("focus",regionFocus);
   history.replaceState(null,"",location.pathname+location.search+"#"+p.toString());
 }
 function restoreHash() {
@@ -79,6 +122,20 @@ function restoreHash() {
   $("art-decorations").checked=artOptions.decorations;
   $("art-zones").checked=artOptions.zones;
   $("art-lod").value=artOptions.lodOverride;
+  if(EXPLORER_METRICS.includes(p.get("sort")))explorerSort=p.get("sort");
+  if(["asc","desc"].includes(p.get("order")))explorerDirection=p.get("order");
+  if(EXPLORER_METRICS.includes(p.get("compare")))explorerCompareMetric=p.get("compare");
+  const ids=new Set(scene.regions.map(x=>x.id));
+  if(ids.has(p.get("left")))explorerLeft=p.get("left");
+  if(ids.has(p.get("right")))explorerRight=p.get("right");
+  if(ids.has(p.get("focus"))&&selected!==null&&
+     (coverage.byCell.get(selected)||[]).some(m=>m.region_id===p.get("focus")))
+    regionFocus=p.get("focus");
+  $("explorer-sort").value=explorerSort;
+  $("explorer-direction").value=explorerDirection;
+  $("explorer-left").value=explorerLeft;
+  $("explorer-right").value=explorerRight;
+  $("explorer-compare-metric").value=explorerCompareMetric;
   if(p.has("layers")) {
     const enabled=new Set(p.get("layers").split(","));
     for(const key of Object.keys(layers)) {
@@ -103,7 +160,8 @@ function updateInspector() {
     $("cell-tags").replaceChildren(tag("Synthetic"));
     if(bundles)renderAlmanac({bundles,year:activeYear,
       lens:currentLensView()?.lens??null,scene,coverage,selected,regionFocus},
-      id=>{regionFocus=id;updateInspector();});
+      id=>{regionFocus=id;updateInspector();saveHash();});
+    refreshExplorer();
     return;
   }
   const cell=coverage.cells[selected];
@@ -129,7 +187,8 @@ function updateInspector() {
   $("cell-tags").replaceChildren(...labels);
   if(bundles)renderAlmanac({bundles,year:activeYear,
     lens:currentLensView()?.lens??null,scene,coverage,selected,regionFocus},
-    id=>{regionFocus=id;updateInspector();});
+    id=>{regionFocus=id;updateInspector();saveHash();});
+  refreshExplorer();
 }
 function draw() {
   scheduled=false;
@@ -297,6 +356,42 @@ function wireControls() {
     camera.scale=Math.max(camera.minScale,Math.min(camera.maxScale,.20));
     schedule(true);saveHash();
   });
+  $("explorer-sort").addEventListener("change",event=>{
+    if(!EXPLORER_METRICS.includes(event.target.value))return;
+    explorerSort=event.target.value;refreshExplorer();saveHash();
+  });
+  $("explorer-direction").addEventListener("change",event=>{
+    if(!["asc","desc"].includes(event.target.value))return;
+    explorerDirection=event.target.value;refreshExplorer();saveHash();
+  });
+  $("explorer-compare-metric").addEventListener("change",event=>{
+    if(!EXPLORER_METRICS.includes(event.target.value))return;
+    explorerCompareMetric=event.target.value;refreshExplorer();saveHash();
+  });
+  for(const [key,side] of [["explorer-left","left"],["explorer-right","right"]]){
+    $(key).addEventListener("change",event=>{
+      if(!scene?.regions.some(r=>r.id===event.target.value))return;
+      if(side==="left")explorerLeft=event.target.value;else explorerRight=event.target.value;
+      refreshExplorer();saveHash();
+    });
+  }
+  $("explorer-download").addEventListener("click",()=>{
+    const view=explorerView();
+    if(!view)return;
+    try{
+      // Production CSV is explicitly forbidden; synthetic_test is the only allowed mode.
+      const csv=syntheticCSV(view,"synthetic_test");
+      const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+      const link=document.createElement("a");
+      link.href=url;link.download="SYNTHETIC-ONLY-explorer-"+view.period+".csv";
+      document.body.append(link);link.click();link.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+      $("explorer-download-status").textContent=
+        "已导出含来源与警示的合成样本 CSV；正式上海统计导出仍 BLOCKED。";
+    }catch(error){
+      $("explorer-download-status").textContent="导出被阻止："+error.message;
+    }
+  });
   $("metric-lens").addEventListener("change",event=>{
     activeLens=event.target.value;
     if(activeLens!=="none"&&!lensCatalog(bundles).some(l=>l.id===activeLens))
@@ -365,7 +460,14 @@ async function main() {
       const option=document.createElement("option");
       option.value=region.id;option.textContent=region.name_zh;
       $("region-search").append(option);
+      for(const key of ["explorer-left","explorer-right"]){
+        const clone=document.createElement("option");
+        clone.value=region.id;clone.textContent=region.name_zh;
+        $(key).append(clone);
+      }
     }
+    explorerLeft=scene.regions[0]?.id??null;
+    explorerRight=scene.regions[1]?.id??null;
     fitScene(false);
     restoreHash();refreshThematic();schedule(true);
     root.dataset.ready="true";
