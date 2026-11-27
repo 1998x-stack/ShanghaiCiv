@@ -1,0 +1,70 @@
+name: P09 synthetic art LOD and browser visual regression
+
+on:
+  pull_request:
+    paths:
+      - 'web/**'
+      - 'tests/js/art*'
+      - 'docs/STYLE_GUIDE.md'
+      - 'docs/ART_P09.md'
+      - 'docs/release/P09_G5C_SYNTHETIC_ACCEPTANCE.md'
+      - 'README.md'
+      - 'docs/IMPLEMENTATION_PLAN.md'
+      - '.github/workflows/p09-synthetic-art.yml'
+  push:
+    paths:
+      - 'web/**'
+      - 'tests/js/art*'
+      - '.github/workflows/p09-synthetic-art.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  art-and-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python contract/schema dependencies
+        run: python -m pip install -r requirements-test.txt
+      - name: Prepare fictional GIS and confirm source gate
+        run: |
+          python -m pipeline spatial --workspace .p07-work
+          python -m pipeline spatial-check --workspace .p07-work
+      - name: Python and Node full semantic/regression suite
+        run: |
+          python -m unittest discover -s tests -v
+          node --test tests/js/*.test.mjs
+      - name: Install Chromium without external APT sources
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium
+      - name: Real P07, P08 and P09 Chromium E2E and art visual proof
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/p09-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          node tests/js/synthetic-map.e2e.mjs
+          node tests/js/almanac.e2e.mjs
+          node tests/js/art.e2e.mjs
+      - name: Check no real Shanghai world/map data or commercial assets published
+        run: |
+          test ! -e web/data/world.json
+          test ! -e web/data/districts_geometry.json
+          test ! -e web/data/zones.json
+          python -c "import json; d=json.load(open('.p07-work/spatial/manifest.synthetic.json')); assert d['synthetic'] is True and d['p01_g1_status']=='BLOCKED' and d['public_map_release_approved'] is False"
+      - name: Upload four-LOD gallery and desktop/mobile interaction screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p09-synthetic-art-visual-evidence
+          path: artifacts/p09/*.png
+          if-no-files-found: ignore
+          retention-days: 7
