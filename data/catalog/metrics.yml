@@ -1,0 +1,74 @@
+# P01 指标字典与真实粒度，不等于已取得生产再利用许可
+version: 1
+reference_period: "2024"
+publish_approved: false
+metrics:
+  - id: area_km2
+    name_zh: 行政区域面积
+    source_id: SRC-STAT-C0202
+    granularity: district
+    unit: km2
+    value_status: observed_published_table
+    additive: true
+  - id: resident_population_10k
+    name_zh: 年末常住人口
+    source_id: SRC-STAT-C0202
+    granularity: district
+    unit: ten_thousand_persons
+    value_status: observed_survey_estimate
+    additive: true
+    caveat: "根据2024人口抽样调查推算，不是逐人普查"
+  - id: non_local_resident_population_10k
+    name_zh: 外省市户籍常住人口
+    source_id: SRC-STAT-C0202
+    granularity: district
+    unit: ten_thousand_persons
+    value_status: observed_survey_estimate
+    additive: true
+  - id: resident_population_density_per_km2
+    name_zh: 人口密度
+    source_id: SRC-STAT-C0202
+    granularity: district
+    unit: persons_per_km2
+    value_status: published_rounded
+    additive: false
+  - id: industrial_enterprise_gross_output_100m_cny
+    name_zh: 工业企业工业总产值
+    source_id: SRC-STAT-C1202
+    granularity: district
+    unit: hundred_million_CNY
+    value_status: observed_published_table
+    additive: false
+    caveat: "区合计差额1717.14亿元未解，禁止计算全市合计或替代GDP"
+  - id: above_scale_service_enterprise_revenue_100m_cny
+    name_zh: 规模以上服务业营业收入
+    source_id: SRC-STAT-C1406
+    granularity: district
+    unit: hundred_million_CNY
+    value_status: observed_published_table
+    additive: true
+    caveat: "不是第三产业增加值"
+  - id: green_area_ha
+    name_zh: 绿地面积
+    source_id: SRC-STAT-C1017
+    granularity: district
+    unit: hectare
+    value_status: observed_published_table
+    additive: true
+    caveat: "不能推断公园或绿地GeoJSON"
+  - id: urban_park_count
+    name_zh: 城市公园数量
+    source_id: SRC-STAT-C1017
+    granularity: district
+    unit: count
+    value_status: observed_published_table
+    additive: true
+    caveat: "仅数量，不包含设施坐标"
+  - id: gdp_district_100m_cny
+    name_zh: 区级地区生产总值
+    source_id: null
+    granularity: district
+    unit: hundred_million_CNY
+    value_status: unavailable_16district_consistent_vintage
+    additive: null
+    caveat: "市级GDP另有初核和最终核实两版；区级须逐区公报核查"

@@ -1,0 +1,133 @@
+# P01 正式来源候选目录；此文件记录「已查到公开网页」，不等于获得再利用许可
+# 更新日期: 2026-11-27
+# 状态词: html_verified / catalog_verified / policy_verified / blocked_license / blocked_dataset_id
+# 所有 license_status: unknown 均不得被生产环境视为 approve。
+catalog_version: 1
+default_license_status: unknown
+sources:
+  - id: SRC-STAT-C0202
+    title: "上海统计年鉴2025 表2.2 各区土地面积、常住人口及人口密度（2024）"
+    publisher: 上海市统计局
+    url: https://tjj.sh.gov.cn/tjnj/2025tjnj/C0202.htm
+    reference_period: "2024"
+    granularity: district
+    format_verified: html_table
+    row_coverage_verified: 16
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "2024人口抽样调查推算；面积来自民政局"
+  - id: SRC-STAT-C1202
+    title: "上海统计年鉴2025 表12.2 各区工业企业主要指标（2024）"
+    publisher: 上海市统计局
+    url: https://tjj.sh.gov.cn/tjnj/2025tjnj/C1202.htm
+    reference_period: "2024"
+    granularity: district
+    format_verified: html_table
+    row_coverage_verified: 16
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "工业总产值不是GDP；16区汇总与市总计差1717.14亿元，原因待核实"
+  - id: SRC-STAT-C1406
+    title: "上海统计年鉴2025 表14.6 各区规模以上服务业企业主要指标（2024）"
+    publisher: 上海市统计局
+    url: https://tjj.sh.gov.cn/tjnj/2025tjnj/C1406.htm
+    reference_period: "2024"
+    granularity: district
+    format_verified: html_table
+    row_coverage_verified: 16
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "营业收入不是第三产业GDP"
+  - id: SRC-STAT-C1017
+    title: "上海统计年鉴2025 表10.17 各区绿化面积（2024）"
+    publisher: 上海市统计局
+    url: https://tjj.sh.gov.cn/tjnj/2025tjnj/C1017.htm
+    reference_period: "2024"
+    granularity: district
+    format_verified: html_table
+    row_coverage_verified: 16
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "提供区级绿化/公园统计，不提供公园坐标"
+  - id: SRC-MZJ-2026-CODES
+    title: "上海市行政区划代码（2026-07-27发布）"
+    publisher: 上海市民政局
+    url: https://mzj.sh.gov.cn/MZ_zhuzhan1539_0-2-8-1459/20260727/535996b5abd045baac0c65552f4527d9.html
+    reference_period: "2026-06-30"
+    granularity: district_and_subdistrict
+    format_verified: html_table
+    row_coverage_verified: 16
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "109街道、107镇、2乡；不包含可直接再分发的区界GeoJSON"
+  - id: SRC-STAT-GDP-2024-PRELIM
+    title: "2024年上海市国民经济和社会发展统计公报（初步核算）"
+    publisher: 上海市统计局
+    url: https://tjj.sh.gov.cn/tjgb/20250324/a7fe18c6d5c24d66bfca89c5bb4cdcfb.html
+    reference_period: "2024"
+    granularity: municipality
+    format_verified: html_article
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "初步核算GDP 53926.71亿元；2026后续有最终核实修订"
+  - id: SRC-STAT-GDP-2024-FINAL
+    title: "2025年上海市生产总值说明中所载2024年最终核实值"
+    publisher: 上海市统计局
+    url: https://tjj.sh.gov.cn/ydsj2/20260120/7cde88dd2bd541d383a67b5b5a0f36b3.html
+    reference_period: "2024"
+    granularity: municipality
+    format_verified: html_article
+    discovery_status: html_verified
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "2024最终核实GDP 53759.53亿元，不与初核版本混用"
+  - id: SRC-TIANDITU-SH
+    title: "天地图·上海在线地图及服务平台"
+    publisher: 上海市测绘院
+    url: https://shanghai.tianditu.gov.cn/map/views/about.html?type=1
+    reference_period: null
+    granularity: geometry_service
+    format_verified: website_terms
+    discovery_status: blocked_license
+    license_status: unknown
+    redistribution_allowed: null
+    notes: "地图API/叠加/离线缓存/矢量下载及审图义务未获授权确认"
+  - id: SRC-SH-OPEN-DATA
+    title: "上海市公共数据开放平台"
+    publisher: 上海市大数据中心及各数据开放主体
+    url: https://data.sh.gov.cn/
+    reference_period: null
+    granularity: per_dataset
+    format_verified: portal
+    discovery_status: blocked_dataset_id
+    license_status: per_dataset
+    redistribution_allowed: null
+    notes: "无条件开放与有条件开放不同；公园/轨交需落实资源ID与协议"
+  - id: SRC-SH-MAP-RULE
+    title: "上海市地图管理办法"
+    publisher: 上海市人民政府
+    url: https://www.shanghai.gov.cn/xxzfgzwj/20210713/0fbc6abe525e458eaa4cf8b921cc0767.html
+    reference_period: null
+    granularity: policy
+    format_verified: html_policy
+    discovery_status: policy_verified
+    license_status: not_applicable
+    redistribution_allowed: null
+    notes: "需根据具体网站地图形态核定送审/审图号适用范围"
+  - id: SRC-SH-DATA-RULE
+    title: "上海市公共数据开放实施细则"
+    publisher: 上海市人民政府
+    url: https://www.shanghai.gov.cn/202307bmgfxwj/20230417/6c6372813aca46e7a004d83dea12e045.html
+    reference_period: null
+    granularity: policy
+    format_verified: html_policy
+    discovery_status: policy_verified
+    license_status: not_applicable
+    redistribution_allowed: null
+    notes: "无条件/有条件开放分别获取，使用成果注明来源"

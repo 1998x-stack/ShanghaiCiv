@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "id": "p01-shanghai-2024-district-research",
+  "status": "RESEARCH_ONLY_NOT_PUBLISH_APPROVED",
+  "surveyed_at": "2026-11-27",
+  "data_period": "2024",
+  "administrative_codes_vintage": "2026-06-30",
+  "source_urls": {
+    "adcode": "https://mzj.sh.gov.cn/MZ_zhuzhan1539_0-2-8-1459/20260727/535996b5abd045baac0c65552f4527d9.html",
+    "population_area": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C0202.htm",
+    "industrial_enterprise": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C1202.htm",
+    "above_scale_service": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C1406.htm",
+    "urban_green_space": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C1017.htm"
+  },
+  "extraction_method": "Manual transcription of publicly rendered official HTML tables; numeric and code columns cross-checked using 16-district sum checks. No original map geometry or provider API payload downloaded.",
+  "license_and_map_review": "NOT_COMPLETE; this file is a research record. Not allowed as an input to the public web/data release until rights, attribution and map publication path are reviewed.",
+  "fields": {
+    "area_km2": "district administrative area (2024; km2)",
+    "resident_population_10k": "year-end resident population (2024; 10,000 persons)",
+    "non_local_resident_population_10k": "residents from non-Shanghai household registrations in yearbook table 2.2 (2024; 10,000 persons)",
+    "resident_population_density_per_km2": "yearbook rounded density (2024; persons/km2)",
+    "industrial_enterprise_gross_output_100m_cny": "Table 12.2 industrial enterprise gross output; yuan x 100 million, not GDP or value added. District sum differs from table city total; scope requires investigation.",
+    "above_scale_service_enterprise_revenue_100m_cny": "Table 14.6 above-scale service enterprises' revenue; yuan x 100 million, not tertiary GDP.",
+    "green_area_ha": "Table 10.17 green area (hectares), not exact polygon geometry.",
+    "urban_park_count": "Table 10.17 urban park count, not facility POI locations."
+  },
+  "districts": [
+    {
+      "district_code": "310115",
+      "name": "浦东新区",
+      "area_km2": 1210.41,
+      "resident_population_10k": 578.58,
+      "non_local_resident_population_10k": 232.32,
+      "resident_population_density_per_km2": 4780,
+      "industrial_enterprise_gross_output_100m_cny": 13260.17,
+      "above_scale_service_enterprise_revenue_100m_cny": 12582.23,
+      "green_area_ha": 34963.67,
+      "urban_park_count": 95
+    },
+    {
+      "district_code": "310101",
+      "name": "黄浦区",
+      "area_km2": 20.46,
+      "resident_population_10k": 50.34,
+      "non_local_resident_population_10k": 17.35,
+      "resident_population_density_per_km2": 24604,
+      "industrial_enterprise_gross_output_100m_cny": 41.16,
+      "above_scale_service_enterprise_revenue_100m_cny": 3525.33,
+      "green_area_ha": 336.2,
+      "urban_park_count": 15
+    },
+    {
+      "district_code": "310104",
+      "name": "徐汇区",
+      "area_km2": 54.76,
+      "resident_population_10k": 109.93,
+      "non_local_resident_population_10k": 29.93,
+      "resident_population_density_per_km2": 20075,
+      "industrial_enterprise_gross_output_100m_cny": 947.75,
+      "above_scale_service_enterprise_revenue_100m_cny": 5057.34,
+      "green_area_ha": 1476.94,
+      "urban_park_count": 24
+    },
+    {
+      "district_code": "310105",
+      "name": "长宁区",
+      "area_km2": 38.3,
+      "resident_population_10k": 68.53,
+      "non_local_resident_population_10k": 20.39,
+      "resident_population_density_per_km2": 17893,
+      "industrial_enterprise_gross_output_100m_cny": 230.13,
+      "above_scale_service_enterprise_revenue_100m_cny": 6352.75,
+      "green_area_ha": 1144.03,
+      "urban_park_count": 20
+    },
+    {
+      "district_code": "310106",
+      "name": "静安区",
+      "area_km2": 36.88,
+      "resident_population_10k": 92.93,
+      "non_local_resident_population_10k": 20.73,
+      "resident_population_density_per_km2": 25198,
+      "industrial_enterprise_gross_output_100m_cny": 72.78,
+      "above_scale_service_enterprise_revenue_100m_cny": 5822.2,
+      "green_area_ha": 846.55,
+      "urban_park_count": 24
+    },
+    {
+      "district_code": "310107",
+      "name": "普陀区",
+      "area_km2": 54.83,
+      "resident_population_10k": 124.87,
+      "non_local_resident_population_10k": 35.08,
+      "resident_population_density_per_km2": 22774,
+      "industrial_enterprise_gross_output_100m_cny": 182.3,
+      "above_scale_service_enterprise_revenue_100m_cny": 2678.99,
+      "green_area_ha": 1605.73,
+      "urban_park_count": 33
+    },
+    {
+      "district_code": "310109",
+      "name": "虹口区",
+      "area_km2": 23.48,
+      "resident_population_10k": 67.99,
+      "non_local_resident_population_10k": 17.91,
+      "resident_population_density_per_km2": 28957,
+      "industrial_enterprise_gross_output_100m_cny": 71.78,
+      "above_scale_service_enterprise_revenue_100m_cny": 5041.57,
+      "green_area_ha": 494.89,
+      "urban_park_count": 10
+    },
+    {
+      "district_code": "310110",
+      "name": "杨浦区",
+      "area_km2": 60.73,
+      "resident_population_10k": 119.97,
+      "non_local_resident_population_10k": 28.89,
+      "resident_population_density_per_km2": 19755,
+      "industrial_enterprise_gross_output_100m_cny": 821.98,
+      "above_scale_service_enterprise_revenue_100m_cny": 5231.98,
+      "green_area_ha": 1560.01,
+      "urban_park_count": 20
+    },
+    {
+      "district_code": "310112",
+      "name": "闵行区",
+      "area_km2": 370.75,
+      "resident_population_10k": 272.5,
+      "non_local_resident_population_10k": 118.27,
+      "resident_population_density_per_km2": 7350,
+      "industrial_enterprise_gross_output_100m_cny": 3585.13,
+      "above_scale_service_enterprise_revenue_100m_cny": 3018.48,
+      "green_area_ha": 10368.69,
+      "urban_park_count": 55
+    },
+    {
+      "district_code": "310113",
+      "name": "宝山区",
+      "area_km2": 270.99,
+      "resident_population_10k": 226.39,
+      "non_local_resident_population_10k": 87.95,
+      "resident_population_density_per_km2": 8354,
+      "industrial_enterprise_gross_output_100m_cny": 2407.14,
+      "above_scale_service_enterprise_revenue_100m_cny": 1408.95,
+      "green_area_ha": 8204.43,
+      "urban_park_count": 39
+    },
+    {
+      "district_code": "310114",
+      "name": "嘉定区",
+      "area_km2": 464.2,
+      "resident_population_10k": 189.04,
+      "non_local_resident_population_10k": 100.36,
+      "resident_population_density_per_km2": 4072,
+      "industrial_enterprise_gross_output_100m_cny": 4722.37,
+      "above_scale_service_enterprise_revenue_100m_cny": 2616.59,
+      "green_area_ha": 12102.72,
+      "urban_park_count": 45
+    },
+    {
+      "district_code": "310116",
+      "name": "金山区",
+      "area_km2": 586.05,
+      "resident_population_10k": 81.23,
+      "non_local_resident_population_10k": 29.09,
+      "resident_population_density_per_km2": 1386,
+      "industrial_enterprise_gross_output_100m_cny": 2548.33,
+      "above_scale_service_enterprise_revenue_100m_cny": 365.28,
+      "green_area_ha": 13113.11,
+      "urban_park_count": 21
+    },
+    {
+      "district_code": "310117",
+      "name": "松江区",
+      "area_km2": 605.64,
+      "resident_population_10k": 195.89,
+      "non_local_resident_population_10k": 108.33,
+      "resident_population_density_per_km2": 3234,
+      "industrial_enterprise_gross_output_100m_cny": 3819.27,
+      "above_scale_service_enterprise_revenue_100m_cny": 910.12,
+      "green_area_ha": 15416.31,
+      "urban_park_count": 32
+    },
+    {
+      "district_code": "310118",
+      "name": "青浦区",
+      "area_km2": 670.14,
+      "resident_population_10k": 128.77,
+      "non_local_resident_population_10k": 69.05,
+      "resident_population_density_per_km2": 1922,
+      "industrial_enterprise_gross_output_100m_cny": 1805.71,
+      "above_scale_service_enterprise_revenue_100m_cny": 4799.03,
+      "green_area_ha": 15181.08,
+      "urban_park_count": 31
+    },
+    {
+      "district_code": "310120",
+      "name": "奉贤区",
+      "area_km2": 687.39,
+      "resident_population_10k": 113.95,
+      "non_local_resident_population_10k": 55.39,
+      "resident_population_density_per_km2": 1658,
+      "industrial_enterprise_gross_output_100m_cny": 2830.66,
+      "above_scale_service_enterprise_revenue_100m_cny": 489.84,
+      "green_area_ha": 15835.25,
+      "urban_park_count": 39
+    },
+    {
+      "district_code": "310151",
+      "name": "崇明区",
+      "area_km2": 1185.49,
+      "resident_population_10k": 59.35,
+      "non_local_resident_population_10k": 12.45,
+      "resident_population_density_per_km2": 501,
+      "industrial_enterprise_gross_output_100m_cny": 587.93,
+      "above_scale_service_enterprise_revenue_100m_cny": 53.24,
+      "green_area_ha": 41414.61,
+      "urban_park_count": 9
+    }
+  ],
+  "quality_checks": {
+    "district_count": {
+      "actual": 16,
+      "expected": 16,
+      "result": "PASS"
+    },
+    "unique_adcodes": {
+      "actual": 16,
+      "expected": 16,
+      "result": "PASS"
+    },
+    "city_total_reconciliation": [
+      {
+        "metric": "area_km2",
+        "district_sum": 6340.5,
+        "city_total": 6340.5,
+        "difference": 0,
+        "result": "PASS"
+      },
+      {
+        "metric": "resident_population_10k",
+        "district_sum": 2480.26,
+        "city_total": 2480.26,
+        "difference": 0,
+        "result": "PASS"
+      },
+      {
+        "metric": "non_local_resident_population_10k",
+        "district_sum": 983.49,
+        "city_total": 983.49,
+        "difference": 0,
+        "result": "PASS"
+      },
+      {
+        "metric": "industrial_enterprise_gross_output_100m_cny",
+        "district_sum": 37934.59,
+        "city_total": 39651.73,
+        "difference": -1717.14,
+        "result": "WARN_NON_ADDITIVE_PENDING_SCOPE_REVIEW"
+      },
+      {
+        "metric": "above_scale_service_enterprise_revenue_100m_cny",
+        "district_sum": 59953.92,
+        "city_total": 59953.9,
+        "difference": 0.02,
+        "result": "PASS_ROUNDING"
+      },
+      {
+        "metric": "green_area_ha",
+        "district_sum": 174064.22,
+        "city_total": 174064.21,
+        "difference": 0.01,
+        "result": "PASS_ROUNDING"
+      },
+      {
+        "metric": "urban_park_count",
+        "district_sum": 512,
+        "city_total": 512,
+        "difference": 0,
+        "result": "PASS"
+      }
+    ]
+  },
+  "known_limitations": [
+    "2026 administrative codes combined with 2024 statistics; no geometry vintages verified",
+    "official table 12.2 city sum exceeds district sums by 1717.14 (亿元); the reason was not established",
+    "industrial output and service revenue are not GDP",
+    "all 16 rows are manually transcribed and require independent spot checking before production",
+    "website dataset/license terms and map publication conditions remain unverified"
+  ]
+}

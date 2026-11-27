@@ -1,0 +1,31 @@
+name: P01 research data quality
+
+on:
+  pull_request:
+    paths:
+      - 'data/research/**'
+      - 'scripts/validate_p01_research.py'
+      - '.github/workflows/p01-research-quality.yml'
+  push:
+    paths:
+      - 'data/research/**'
+      - 'scripts/validate_p01_research.py'
+      - '.github/workflows/p01-research-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check-p01-research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate research-only district observations
+        run: python scripts/validate_p01_research.py
+      - name: Confirm no public map data was generated
+        run: |
+          test ! -e web/data/districts_2024_observations.json
+          test ! -e web/data/world.json

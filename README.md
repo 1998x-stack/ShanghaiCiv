@@ -6,6 +6,15 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 **当前进度：** 已制定 PRD 与分阶段 WBS，**尚未**完成数据授权、官方地图展示/审核合规确认，亦未开始产品代码实现。以下计划任务不能被视为完成的工程交付。
 
+## P01 实际调查结果（2026-11-27）
+
+- [P01 可行性报告](docs/research/FEASIBILITY_REPORT.md) — 官方年鉴4张区级数据表、16区编码、2024统计口径和质量异常。
+- [16区2024统计研究数据](data/research/districts_2024_observations.json) — 16区 × 8项数值指标；**仅研究用途，不能自动公开到web/data**。
+- [数据源注册](data/catalog/sources.yml) / [指标字典](data/catalog/metrics.yml) / [自动数据检查](scripts/validate_p01_research.py)。
+- [地图与发布合规检查](docs/compliance/MAP_PUBLICATION_CHECKLIST.md) — **G1=BLOCKED**，几何数据/SDK权限及地图审核路径尚待正式确认。
+
+剩余外部事项：[#3 地图使用与审核](https://github.com/1998x-stack/ShanghaiCiv/issues/3) · [#4 统计使用许可与工业差额](https://github.com/1998x-stack/ShanghaiCiv/issues/4) · [#5 公共开放平台具体POI数据](https://github.com/1998x-stack/ShanghaiCiv/issues/5)。
+
 ## 📚 文档导航
 
 | 文档 | 内容 | 用途 |
