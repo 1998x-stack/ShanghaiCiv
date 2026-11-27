@@ -46,6 +46,29 @@
         <label class="toggle-row"><span><span class="legend-dot partial"></span> 混合覆盖格标记</span>
           <input id="layer-partial" type="checkbox" checked></label>
       </section>
+      <section class="panel-section art-controls" aria-label="虚构地图美术控制">
+        <div class="section-kicker">PROCEDURAL WORLD ART</div>
+        <h2>地图风格 · 四级细节</h2>
+        <label class="toggle-row"><span><span class="legend-dot art"></span> 程序化地表装饰</span>
+          <input id="art-decorations" type="checkbox" checked></label>
+        <label class="toggle-row"><span><span class="legend-dot zone"></span> 虚构功能区标签</span>
+          <input id="art-zones" type="checkbox" checked></label>
+        <label for="art-lod" class="control-label">细节级别</label>
+        <select id="art-lod" aria-label="选择地图美术细节">
+          <option value="auto">自动（依据缩放）</option>
+          <option value="overview">远景 Overview</option>
+          <option value="regional">中景 Regional</option>
+          <option value="local">近景 Local</option>
+          <option value="detail">局部 Detail</option>
+        </select>
+        <label for="art-zone" class="control-label art-zone-label">聚焦虚构功能类型</label>
+        <select id="art-zone" aria-label="聚焦虚构功能区">
+          <option value="">选择虚构区域类型</option>
+        </select>
+        <p class="art-info">四个类型仅为合成造型：非陆家嘴、张江、虹桥或临港的真实位置与统计。</p>
+        <div id="art-state" class="art-state" role="status" aria-live="polite">艺术层未绘制</div>
+        <a href="./art.html" class="art-gallery-link">查看四级 LOD 画廊</a>
+      </section>
       <section class="panel-section thematic-controls" aria-label="虚构统计专题">
         <div class="section-kicker">SYNTHETIC THEMATIC DATA</div>
         <h2>统计专题 · 区级</h2>
