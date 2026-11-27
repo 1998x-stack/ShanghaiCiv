@@ -275,7 +275,7 @@
 
 ## P09 synthetic art 工程进展（2026-11-27）
 
-已实现原创程序化 Canvas 美术、四级 LOD、固定种子、LRU 描述符缓存、虚构区域类型及标签避让；详见 [美术设计标准](STYLE_GUIDE.md) 和 [P09 测试说明](ART_P09.md)。**完成状态以真实 Chromium E2E 验收为准**。真实四个示范区域需要官方资料和地图准入，不因虚构美术而自动宣称已经实现。
+已实现原创程序化 Canvas 美术、四级 LOD、固定种子、LRU 描述符缓存、虚构区域类型及标签避让；详见 [美术设计标准](STYLE_GUIDE.md) 和 [P09 测试说明](ART_P09.md)。**synthetic-only 工程基线已通过 Chromium E2E 与 P02–P08 全量回归**，详见 [P09/G5c 验收报告](release/P09_G5C_SYNTHETIC_ACCEPTANCE.md)。真实四个示范区域需要官方资料和地图准入，不因虚构美术而自动宣称已经实现。
 
 ---
 
