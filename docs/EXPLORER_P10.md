@@ -1,6 +1,6 @@
 # ShanghaiCiv P10｜Explorer 区际对比与合成数据研究
 
-> 状态：开发中，最终以 P10 GitHub Actions 实际结果为准。  
+> 状态：**P10/G5d synthetic-only 工程测试已通过**；具体证据见 [G5d 验收记录](release/P10_G5D_SYNTHETIC_ACCEPTANCE.md)。  
 > **仅使用人工虚构的两个行政区以及 2024/2025 年测试数字，绝非上海真实人口或地图。**  
 > 地图审核与真实统计再利用 G1/G6 继续 **BLOCKED**。
 
