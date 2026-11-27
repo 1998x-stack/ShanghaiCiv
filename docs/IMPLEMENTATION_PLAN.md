@@ -300,6 +300,12 @@
 
 ---
 
+## P10 synthetic Explorer 实施进展（2026-11-27）
+
+已开发纯合成区际比较、人口/密度排序表、原生 SVG 散点、地图联动、Almanac 来源追溯与 synthetic-only CSV 导出门禁；见 [P10 说明](EXPLORER_P10.md)。真实 16 区/GDP/产业结构尚无本阶段全部指标和数据再利用许可，不能按合成案例声称完成。**正式阶段验收以 P10 GitHub Actions 的 Node 与 Chromium 结果为准**。
+
+---
+
 ## P10｜Explorer、区际对比与数据洞察
 
 **目标**：使地图可做可信的探索性研究。**投入级别**：M–L（3–6 工程日）。**负责人**：FE + DE。
