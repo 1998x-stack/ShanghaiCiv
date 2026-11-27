@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/spatial-coverage.schema.json",
+  "title": "P04 synthetic coverage output v1 (never publish as real Shanghai map)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "synthetic",
+    "publish_approved",
+    "disclosure",
+    "grid",
+    "cells",
+    "fixture_source_sha256",
+    "grid_cell_area_m2"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "synthetic": {
+      "const": true
+    },
+    "publish_approved": {
+      "const": false
+    },
+    "disclosure": {
+      "type": "string",
+      "pattern": "FICTIONAL"
+    },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout",
+        "orientation",
+        "radius_m",
+        "cols",
+        "rows",
+        "origin_x_m",
+        "origin_y_m"
+      ],
+      "properties": {
+        "layout": {
+          "const": "odd-r"
+        },
+        "orientation": {
+          "const": "pointy"
+        },
+        "radius_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cols": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "origin_x_m": {
+          "type": "number"
+        },
+        "origin_y_m": {
+          "type": "number"
+        }
+      }
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cell_id",
+          "land_fraction",
+          "water_fraction",
+          "outside_fraction",
+          "partial_cell",
+          "dominant"
+        ],
+        "properties": {
+          "cell_id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "land_fraction": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "water_fraction": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "outside_fraction": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "partial_cell": {
+            "type": "boolean"
+          },
+          "dominant": {
+            "enum": [
+              "land",
+              "water",
+              "outside"
+            ]
+          }
+        }
+      }
+    },
+    "fixture_source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "grid_cell_area_m2": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  }
+}

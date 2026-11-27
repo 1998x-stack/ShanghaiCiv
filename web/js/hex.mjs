@@ -58,6 +58,41 @@ export class HexGrid {
       ? row * this.cols + col : -1;
   }
 
+  vertices(col, row) {
+    const [cx, cy] = this.center(col, row);
+    return Array.from({length: 6}, (_,k) => {
+      const angle = (-90 + 60*k) * Math.PI / 180;
+      return [cx + this.radius_m*Math.cos(angle), cy + this.radius_m*Math.sin(angle)];
+    });
+  }
+
+  cellBounds(col, row) {
+    const [cx, cy] = this.center(col,row);
+    const half = SQRT3*this.radius_m/2;
+    return [cx-half,cy-this.radius_m,cx+half,cy+this.radius_m];
+  }
+
+  visibleCells(xmin,ymin,xmax,ymax) {
+    if (![xmin,ymin,xmax,ymax].every(Number.isFinite) || xmin>xmax || ymin>ymax) {
+      throw new RangeError("invalid viewport");
+    }
+    const rad=this.radius_m, stepX=SQRT3*rad;
+    const row0=Math.max(0,Math.ceil((ymin-this.origin_y_m-rad)/(1.5*rad)));
+    const row1=Math.min(this.rows-1,Math.floor((ymax-this.origin_y_m+rad)/(1.5*rad)));
+    const ids=[];
+    for(let row=row0; row<=row1;row++) {
+      const cxOffset=this.origin_x_m+stepX*0.5*(row&1);
+      const halfX=stepX/2;
+      const col0=Math.max(0,Math.ceil((xmin-cxOffset-halfX)/stepX));
+      const col1=Math.min(this.cols-1,Math.floor((xmax-cxOffset+halfX)/stepX));
+      for(let col=col0;col<=col1;col++) {
+        const [x0,y0,x1,y1]=this.cellBounds(col,row);
+        if(x0<=xmax && x1>=xmin && y0<=ymax && y1>=ymin) ids.push(this.index(col,row));
+      }
+    }
+    return ids;
+  }
+
   neighbors(cellId) {
     const [col,row] = this.colRow(cellId);
     return NEIGHBORS[row & 1].flatMap(([dc,dr]) => {
