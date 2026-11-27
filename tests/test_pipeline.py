@@ -49,7 +49,7 @@ class TestOfflinePipeline(unittest.TestCase):
 
     def test_all_stages_independent(self):
         self.assertEqual(run("fetch", workspace=self.work)["status"], "PASS")
-        self.assertEqual(len(list((self.work / "raw").glob("synthetic_*.json"))), 2)
+        self.assertEqual(len(list((self.work / "raw").glob("synthetic_20??.json"))), 2)
         self.assertEqual(run("process", workspace=self.work)["status"], "PASS")
         self.assertEqual(run("build", workspace=self.work)["status"], "PASS")
         self.assertEqual(run("check", workspace=self.work)["status"], "PASS")
