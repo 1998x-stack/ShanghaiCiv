@@ -8,6 +8,7 @@ from __future__ import annotations
 import time
 import urllib.error
 import urllib.request
+from urllib.parse import urlsplit
 from pathlib import Path
 
 from pipeline.core.source import SourceInfo
@@ -28,8 +29,11 @@ def fetch_http(info: SourceInfo, destination: Path, *, offline: bool = True,
         if sha256(path.read_bytes()) != previous.get("sha256"):
             raise ValueError("SHA256_MISMATCH")
         return path
-    if not info.url.startswith("https://"):
+    parts = urlsplit(info.url)
+    if parts.scheme != "https" or not parts.hostname:
         raise ValueError("HTTPS_ONLY")
+    if parts.username or parts.password or parts.query or parts.fragment:
+        raise ValueError("SOURCE_URL_CREDENTIALS_OR_QUERY_FORBIDDEN")
     error = None
     for attempt in range(max(1, retries + 1)):
         try:
