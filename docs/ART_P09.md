@@ -7,9 +7,9 @@
 
 在仓库根目录本地启动：
 
-\`\`\`bash
+```bash
 python -m http.server 8765 --bind 127.0.0.1
-\`\`\`
+```
 
 - [四级美术画廊](../web/dev/art.html)：本地地址 http://127.0.0.1:8765/web/dev/art.html。
 - [合成地图交互原型](../web/dev/synthetic-map.html)：本地地址 http://127.0.0.1:8765/web/dev/synthetic-map.html。
@@ -20,22 +20,22 @@ python -m http.server 8765 --bind 127.0.0.1
 
 | 模块 | 责任 |
 |---|---|
-| \`web/js/render/art/tokens.mjs\` | 自有设计 token；无商业游戏素材 |
-| \`random.mjs\` | 稳定固定 seed/hash；无运行时不可重现随机值 |
-| \`lod.mjs\` | 四档 LOD 阈值与每格装饰预算 |
-| \`cache.mjs\` | 有上限的纯矢量描述符 LRU |
-| \`props.mjs\` | 树/屋顶/灌木、水纹等**虚构**地表造型 |
-| \`labels.mjs\` | 按优先级和矩形碰撞避免标签重叠 |
-| \`zones.mjs\` | 四类虚构功能标签、固定合成坐标及限制说明 |
-| \`art-layer.mjs\` | 可见格绘制、缓存统计与地标/大区标签 |
-| \`web/js/render/synthetic-canvas.mjs\` | P08 专题与 P09 美术层的安全组合 |
-| \`web/js/app/synthetic-map.mjs\` | 控件、相机聚焦、URL hash、诊断 |
-| \`web/js/app/art-gallery.mjs\` | 独立四级画廊 |
-| \`tests/js/art.test.mjs\` | RNG、LOD、LRU、碰撞、场景门禁、250k 格视窗裁剪 |
-| \`tests/js/art.e2e.mjs\` | Chromium 画廊像素一致、交互、缓存、截图、移动端 |
-| \`.github/workflows/p09-synthetic-art.yml\` | P02–P09 端到端 CI，截图证据 |
+| `web/js/render/art/tokens.mjs` | 自有设计 token；无商业游戏素材 |
+| `random.mjs` | 稳定固定 seed/hash；无运行时不可重现随机值 |
+| `lod.mjs` | 四档 LOD 阈值与每格装饰预算 |
+| `cache.mjs` | 有上限的纯矢量描述符 LRU |
+| `props.mjs` | 树/屋顶/灌木、水纹等**虚构**地表造型 |
+| `labels.mjs` | 按优先级和矩形碰撞避免标签重叠 |
+| `zones.mjs` | 四类虚构功能标签、固定合成坐标及限制说明 |
+| `art-layer.mjs` | 可见格绘制、缓存统计与地标/大区标签 |
+| `web/js/render/synthetic-canvas.mjs` | P08 专题与 P09 美术层的安全组合 |
+| `web/js/app/synthetic-map.mjs` | 控件、相机聚焦、URL hash、诊断 |
+| `web/js/app/art-gallery.mjs` | 独立四级画廊 |
+| `tests/js/art.test.mjs` | RNG、LOD、LRU、碰撞、场景门禁、250k 格视窗裁剪 |
+| `tests/js/art.e2e.mjs` | Chromium 画廊像素一致、交互、缓存、截图、移动端 |
+| `.github/workflows/p09-synthetic-art.yml` | P02–P09 端到端 CI，截图证据 |
 
-所有自绘图形在 Canvas 中构造，没有下载素材或使用商业游戏的画面或字体。P09 不改变 P08 指标与 \`value=null\` 的语义，区级数据仍按完整合成 Polygon 展示，不能按 hex 装饰对象数推算人口或建筑分布。
+所有自绘图形在 Canvas 中构造，没有下载素材或使用商业游戏的画面或字体。P09 不改变 P08 指标与 `value=null` 的语义，区级数据仍按完整合成 Polygon 展示，不能按 hex 装饰对象数推算人口或建筑分布。
 
 ## 四个示范类型
 
@@ -46,7 +46,7 @@ python -m http.server 8765 --bind 127.0.0.1
 | 虚构交通枢纽 | 中性交通风格 | 虹桥的现实交通节点 |
 | 虚构制造港 | 虚构工厂风格 | 临港的实际产业与地理 |
 
-全部锚点处于 \`SYNTHETIC_LOCAL_METERS\` 坐标系，只为测试 UI。真实功能区需用官方数据、许可和地图合规审查后另行接入。
+全部锚点处于 `SYNTHETIC_LOCAL_METERS` 坐标系，只为测试 UI。真实功能区需用官方数据、许可和地图合规审查后另行接入。
 
 ## 验收矩阵
 
