@@ -3,6 +3,9 @@ import {assertSyntheticScene,buildSyntheticCoverage,geometryBounds} from "../syn
 import {renderBase,renderOverlay,drawScalebar} from "../render/synthetic-canvas.mjs";
 import {assertSyntheticData,lensCatalog,districtMetricsView,SUPPORTED_PERIODS} from "../almanac.mjs";
 import {renderLensLegend,renderAlmanac} from "./almanac-ui.mjs";
+import {createArtSession} from "../render/art/art-layer.mjs";
+import {SYNTHETIC_ZONES,assertSyntheticZones} from "../render/art/zones.mjs";
+import {LOD_LEVELS} from "../render/art/lod.mjs";
 
 const $=id=>document.getElementById(id);
 const root=$("app"),viewport=$("map-viewport");
@@ -10,6 +13,8 @@ const baseCanvas=$("map-base"),overlayCanvas=$("map-interaction");
 const baseCtx=baseCanvas.getContext("2d"),overlayCtx=overlayCanvas.getContext("2d");
 const camera=new Camera();
 const layers={terrain:true,grid:true,districts:true,partial:true};
+const artSession=createArtSession(160);
+const artOptions={decorations:true,zones:true,lodOverride:"auto"};
 const sceneUrl=new URL("../../../tests/fixtures/synthetic/synthetic_gis_scene.json",import.meta.url);
 const vintageUrls=Object.fromEntries(SUPPORTED_PERIODS.map(year=>[
   year,new URL("../../../tests/fixtures/synthetic/synthetic_"+year+".json",import.meta.url)
@@ -48,6 +53,9 @@ function saveHash() {
   p.set("layers",Object.keys(layers).filter(k=>layers[k]).join(","));
   p.set("year",activeYear);
   p.set("lens",activeLens);
+  p.set("art",artOptions.decorations?"1":"0");
+  p.set("zones",artOptions.zones?"1":"0");
+  p.set("lod",artOptions.lodOverride);
   history.replaceState(null,"",location.pathname+location.search+"#"+p.toString());
 }
 function restoreHash() {
@@ -65,6 +73,12 @@ function restoreHash() {
     const n=Number(id);
     if(Number.isSafeInteger(n)&&n<coverage.grid.size)selected=n;
   }
+  if(["0","1"].includes(p.get("art")))artOptions.decorations=p.get("art")==="1";
+  if(["0","1"].includes(p.get("zones")))artOptions.zones=p.get("zones")==="1";
+  if(p.get("lod")==="auto"||LOD_LEVELS.includes(p.get("lod")))artOptions.lodOverride=p.get("lod");
+  $("art-decorations").checked=artOptions.decorations;
+  $("art-zones").checked=artOptions.zones;
+  $("art-lod").value=artOptions.lodOverride;
   if(p.has("layers")) {
     const enabled=new Set(p.get("layers").split(","));
     for(const key of Object.keys(layers)) {
@@ -122,7 +136,14 @@ function draw() {
   if(!coverage)return;
   const start=performance.now();
   if(baseDirty) {
-    visibleCells=renderBase(baseCtx,camera,coverage,scene,layers,currentLensView()).visibleCells;
+    const baseResult=renderBase(baseCtx,camera,coverage,scene,layers,currentLensView(),
+      {session:artSession,options:artOptions});
+    visibleCells=baseResult.visibleCells;
+    const art=baseResult.art;
+    if(art)$("art-state").textContent="LOD "+art.lod+
+      " · 装饰 "+art.props+" · 标签 "+art.labels+
+      " · 缓存 "+art.cache.entries+"/"+art.cache.limit+
+      "（命中 "+art.cache.hits+" / 未命中 "+art.cache.misses+" / 淘汰 "+art.cache.evictions+"）";
     baseDirty=false;
   }
   renderOverlay(overlayCtx,camera,coverage,{hovered,selected});
@@ -258,6 +279,24 @@ function wireControls() {
       layers[key]=event.target.checked;schedule(true);saveHash();
     });
   }
+  $("art-decorations").addEventListener("change",event=>{
+    artOptions.decorations=event.target.checked;schedule(true);saveHash();
+  });
+  $("art-zones").addEventListener("change",event=>{
+    artOptions.zones=event.target.checked;schedule(true);saveHash();
+  });
+  $("art-lod").addEventListener("change",event=>{
+    const value=event.target.value;
+    if(value!=="auto"&&!LOD_LEVELS.includes(value))return;
+    artOptions.lodOverride=value;schedule(true);saveHash();
+  });
+  $("art-zone").addEventListener("change",event=>{
+    const zone=SYNTHETIC_ZONES.find(z=>z.id===event.target.value);
+    if(!zone)return;
+    camera.centerX=zone.x;camera.centerY=zone.y;
+    camera.scale=Math.max(camera.minScale,Math.min(camera.maxScale,.20));
+    schedule(true);saveHash();
+  });
   $("metric-lens").addEventListener("change",event=>{
     activeLens=event.target.value;
     if(activeLens!=="none"&&!lensCatalog(bundles).some(l=>l.id===activeLens))
@@ -316,6 +355,12 @@ async function main() {
     const response=responses[0];
     if(!response.ok)throw new Error("HTTP "+response.status);
     coverage=buildSyntheticCoverage(scene);
+    assertSyntheticZones(scene);
+    for(const zone of SYNTHETIC_ZONES){
+      const option=document.createElement("option");
+      option.value=zone.id;option.textContent=zone.label+"（"+zone.description+"）";
+      $("art-zone").append(option);
+    }
     for(const region of scene.regions) {
       const option=document.createElement("option");
       option.value=region.id;option.textContent=region.name_zh;
