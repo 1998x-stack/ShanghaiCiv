@@ -16,7 +16,7 @@ from pipeline.build.spatial import (SCENE, _assert_synthetic, _intersections,
 from pipeline.core.geo import (SyntheticLocalProjection, clip_to_convex_polygon,
                                intersection_area, locate_point, polygon_area, signed_area)
 from pipeline.core.hexgrid import HexGrid
-from pipeline.core.store import sha256
+from pipeline.core.store import sha256, write_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -167,6 +167,28 @@ class TestSpatialBuild(unittest.TestCase):
         schema = json.loads((ROOT/"schemas/world.schema.json").read_text())
         world = json.loads((self.workspace/"spatial/world.synthetic.json").read_text())
         self.assertEqual(list(jsonschema.Draft202012Validator(schema).iter_errors(world)),[])
+        coverage_schema = json.loads((ROOT/"schemas/spatial-coverage.schema.json").read_text())
+        coverage = json.loads((self.workspace/"spatial/coverage.synthetic.json").read_text())
+        self.assertEqual(list(jsonschema.Draft202012Validator(coverage_schema).iter_errors(coverage)),[])
+
+    def test_coverage_mismatch_rejected_even_with_updated_hash(self):
+        build_synthetic_world(self.workspace)
+        cover_file = self.workspace/"spatial/coverage.synthetic.json"
+        manifest_file = self.workspace/"spatial/manifest.synthetic.json"
+        cover = json.loads(cover_file.read_text())
+        original_land = cover["cells"][0]["land_fraction"]
+        self.assertGreater(original_land,0.5)
+        cover["cells"][0]["land_fraction"] = 0.7
+        cover["cells"][0]["outside_fraction"] = 0.3
+        cover["cells"][0]["water_fraction"] = 0
+        cover["cells"][0]["partial_cell"] = True
+        digest = write_json(cover_file, cover)
+        manifest = json.loads(manifest_file.read_text())
+        manifest["coverage_sha256"] = digest
+        write_json(manifest_file, manifest)
+        result = check_synthetic_world(self.workspace)
+        self.assertEqual(result["status"],"FAIL")
+        self.assertIn("LAND_MEMBERSHIP_MISMATCH", result["failures"][0])
 
     def test_tampered_world_or_manifest_causes_fail(self):
         build_synthetic_world(self.workspace)
