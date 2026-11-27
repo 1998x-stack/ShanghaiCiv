@@ -72,6 +72,12 @@ test("district comparisons require same year, definition, method and complete va
   const mutated=structuredClone(v);
   mutated.rows.find(r=>r.region_id===B).metrics.population.unit="kilograms";
   assert.equal(compareDistricts(mutated,A,B,"population").code,"INCOMPATIBLE_DEFINITION");
+  const crossed=structuredClone(v);
+  crossed.rows.find(r=>r.region_id===B).period="2025";
+  assert.equal(compareDistricts(crossed,A,B,"population").code,"CROSS_PERIOD");
+  const newSource=structuredClone(v);
+  newSource.rows.find(r=>r.region_id===B).metrics.population.source_id="SYN-002";
+  assert.equal(compareDistricts(newSource,A,B,"population").code,"INCOMPATIBLE_DEFINITION");
 });
 
 test("scatter omits missing X/Y and refuses correlation claims with tiny sample",()=>{
