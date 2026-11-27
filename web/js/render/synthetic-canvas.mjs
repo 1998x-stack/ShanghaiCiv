@@ -35,7 +35,28 @@ function landColor(cell,membership) {
   return "#63857b";
 }
 
-export function renderBase(ctx,camera,coverage,scene,layers) {
+/**
+ * Thematic overlay fills entire fictional district polygons, not hex cells.
+ * It must never imply that a district metric is an observed hex value.
+ */
+function renderDistrictThematic(ctx,camera,scene,lensView) {
+  if(!lensView || lensView.granularity!=="district" || lensView.synthetic!==true)
+    return;
+  const colors=new Map(lensView.items.map(i=>[i.id,i.color]));
+  ctx.save();
+  ctx.globalAlpha=.47;
+  for(const feature of scene.regions) {
+    const color=colors.get(feature.id);
+    if(!color)continue;
+    ctx.beginPath();
+    for(const ring of featurePaths(feature.geometry))polygonPath(ctx,ring,camera);
+    ctx.fillStyle=color;
+    ctx.fill("evenodd"); // keep fictional island and holes topologically correct
+  }
+  ctx.restore();
+}
+
+export function renderBase(ctx,camera,coverage,scene,layers,lensView=null) {
   ctx.clearRect(0,0,camera.width,camera.height);
   const bg=ctx.createLinearGradient(0,0,camera.width,camera.height);
   bg.addColorStop(0,"#111f2c");bg.addColorStop(1,"#1d3040");
@@ -63,6 +84,7 @@ export function renderBase(ctx,camera,coverage,scene,layers) {
       ctx.fillStyle="#f3d186";ctx.fill();
     }
   }
+  renderDistrictThematic(ctx,camera,scene,lensView);
   if(layers.districts) {
     for(const feature of scene.regions) {
       ctx.strokeStyle=feature.id.endsWith("-a")?"#d2f6d9":"#fce2ab";
