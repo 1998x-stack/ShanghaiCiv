@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-27",
+  "probe_method": "Web-rendered official page inspection (not local HTTP/network download)",
+  "http_status_probe": "NOT_RUN",
+  "raw_file_sha256": "NOT_AVAILABLE",
+  "results": [
+    {
+      "source": "SRC-STAT-C0202",
+      "url": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C0202.htm",
+      "format": "html_table",
+      "verified_district_rows": 16,
+      "result": "PASS_VISIBLE"
+    },
+    {
+      "source": "SRC-STAT-C1202",
+      "url": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C1202.htm",
+      "format": "html_table",
+      "verified_district_rows": 16,
+      "result": "PASS_VISIBLE_WITH_SUM_WARNING"
+    },
+    {
+      "source": "SRC-STAT-C1406",
+      "url": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C1406.htm",
+      "format": "html_table",
+      "verified_district_rows": 16,
+      "result": "PASS_VISIBLE"
+    },
+    {
+      "source": "SRC-STAT-C1017",
+      "url": "https://tjj.sh.gov.cn/tjnj/2025tjnj/C1017.htm",
+      "format": "html_table",
+      "verified_district_rows": 16,
+      "result": "PASS_VISIBLE"
+    },
+    {
+      "source": "SRC-MZJ-2026-CODES",
+      "url": "https://mzj.sh.gov.cn/MZ_zhuzhan1539_0-2-8-1459/20260727/535996b5abd045baac0c65552f4527d9.html",
+      "format": "html_table",
+      "verified_district_rows": 16,
+      "result": "PASS_VISIBLE_CODES"
+    },
+    {
+      "source": "SRC-TIANDITU-SH",
+      "url": "https://shanghai.tianditu.gov.cn/map/views/about.html?type=1",
+      "format": "terms_page",
+      "result": "PASS_TERMS_READ_BLOCKED_USE_APPROVAL"
+    },
+    {
+      "source": "SRC-SH-OPEN-DATA",
+      "url": "https://data.sh.gov.cn/",
+      "format": "portal",
+      "result": "PASS_PORTAL_BLOCKED_INDIVIDUAL_DATASET_LICENSE"
+    }
+  ],
+  "warnings": [
+    "No original file downloads or SHA256 were produced; do not claim source raw cache verified.",
+    "No map geometry was acquired; no API token or data license obtained.",
+    "GDP at city level has a later revision; district GDP full coverage not established.",
+    "Industrial district sum vs total difference 1717.14 hundred million CNY requires explanation."
+  ],
+  "release_gate": {
+    "status": "BLOCKED",
+    "reason": "Geo-data API/license and public map review not completed"
+  }
+}
