@@ -151,7 +151,7 @@
 
 ## P04 实施进展（2026-11-27）
 
-已建立 synthetic-only GIS 实现：[空间算法与实现说明](GIS_P04.md)；含本地投影适配、Polygon/MultiPolygon holes、六边形面积叠合、离岛/水域与 partial cell、格网视窗索引。**需以最新 CI 完成后才能记为 G4 synthetic ENGINEERING PASS**。真实上海 16 区几何与地图审核仍在 [Issue #3](https://github.com/1998x-stack/ShanghaiCiv/issues/3) 等待正式授权，不允许发布生产 world.json。
+已建立 synthetic-only GIS 实现：[空间算法与实现说明](GIS_P04.md)；含本地投影适配、Polygon/MultiPolygon holes、六边形面积叠合、离岛/水域与 partial cell、格网视窗索引。**已通过 G4 synthetic ENGINEERING PASS（见 [CI 验收报告](release/P04_G4_SYNTHETIC_ACCEPTANCE.md)）**。真实上海 16 区几何与地图审核仍在 [Issue #3](https://github.com/1998x-stack/ShanghaiCiv/issues/3) 等待正式授权，不允许发布生产 world.json。
 
 ---
 
