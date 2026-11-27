@@ -185,17 +185,41 @@ def check_synthetic_world(workspace: Path, *, write_report: bool = True) -> dict
         if world.get("projection", {}).get("crs") != scene["canonical_crs"]:
             raise ValueError("CRS_MISMATCH")
         grid = HexGrid.from_contract(world["grid"])
-        if len(coverage["cells"]) != grid.size or coverage["synthetic"] is not True:
+        if (len(coverage["cells"]) != grid.size or coverage["synthetic"] is not True
+                or coverage.get("publish_approved") is not False
+                or coverage.get("grid") != world["grid"]
+                or coverage.get("fixture_source_sha256") != manifest["source_sha256"]):
             raise ValueError("SYNTHETIC_COVERAGE_INCONSISTENT")
-        for cell in coverage["cells"]:
-            if abs(cell["land_fraction"] + cell["water_fraction"] +
-                   cell["outside_fraction"] - 1) > 5e-7:
-                raise ValueError("CELL_SURFACE_FRACTIONS_INVALID")
-            if not 0 <= cell["cell_id"] < grid.size:
-                raise ValueError("CELL_ID_OUTSIDE_GRID")
+        expected_districts = {feature["id"] for feature in scene["regions"]}
+        membership_by_cell: dict[int, float] = {}
+        seen_pair: set[tuple[int, str]] = set()
         for member in world["memberships"]:
-            if not 0 <= member["cell_id"] < grid.size or not 0 < member["fraction"] <= 1 + 1e-7:
+            cid, rid, fraction = member["cell_id"], member["region_id"], member["fraction"]
+            if (not 0 <= cid < grid.size or not 0 < fraction <= 1 + 1e-7
+                    or rid not in expected_districts):
                 raise ValueError("INVALID_WORLD_MEMBERSHIP")
+            if (cid, rid) in seen_pair:
+                raise ValueError("DUPLICATE_WORLD_MEMBERSHIP")
+            seen_pair.add((cid, rid))
+            membership_by_cell[cid] = membership_by_cell.get(cid, 0.0) + fraction
+        seen_cells: set[int] = set()
+        for cell in coverage["cells"]:
+            cid = cell["cell_id"]
+            if not 0 <= cid < grid.size or cid in seen_cells:
+                raise ValueError("CELL_ID_OUTSIDE_GRID_OR_DUPLICATE")
+            seen_cells.add(cid)
+            land, water, outside = (cell["land_fraction"],
+                                    cell["water_fraction"], cell["outside_fraction"])
+            if (not all(0 <= f <= 1 for f in (land, water, outside))
+                    or abs(land + water + outside - 1) > 5e-7):
+                raise ValueError("CELL_SURFACE_FRACTIONS_INVALID")
+            if abs(land - membership_by_cell.get(cid, 0.0)) > 5e-7:
+                raise ValueError("LAND_MEMBERSHIP_MISMATCH")
+            expected_partial = sum(f > 1e-7 for f in (land, water, outside)) > 1
+            if cell["partial_cell"] != expected_partial:
+                raise ValueError("CELL_PARTIAL_FLAG_MISMATCH")
+        if len(seen_cells) != grid.size:
+            raise ValueError("MISSING_CELL_COVERAGE")
         if manifest.get("quality", {}).get("island_cell_count", 0) < 1:
             raise ValueError("SYNTHETIC_ISLAND_NOT_EXERCISED")
         if manifest.get("quality", {}).get("river_or_coast_cell_count", 0) < 1:
