@@ -10,7 +10,8 @@
     "publisher",
     "url",
     "license_status",
-    "redistribution_allowed"
+    "redistribution_allowed",
+    "native_granularity"
   ],
   "properties": {
     "id": {
@@ -60,6 +61,15 @@
       "type": [
         "string",
         "null"
+      ]
+    },
+    "native_granularity": {
+      "enum": [
+        "municipality",
+        "district",
+        "zone",
+        "hex_cell",
+        "facility"
       ]
     }
   }
