@@ -143,3 +143,11 @@ select{width:100%;appearance:none;border:1px solid #455d5b;background:#213744;co
   .almanac-section{margin-top:18px}
   .almanac-region{padding:10px}
 }
+
+/* Keep the map viewport on screen even when the audit sidebar grows taller. */
+@media(min-width:931px){
+  .app-shell{height:100dvh;min-height:0}
+  .side-panel,.inspector{height:100dvh;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+  .map-column{height:100dvh;min-height:0}
+  .map-viewport{min-height:0}
+}
