@@ -1,0 +1,64 @@
+name: P04 synthetic GIS geometry and release gating
+
+on:
+  pull_request:
+    paths:
+      - 'pipeline/core/geo.py'
+      - 'pipeline/core/hexgrid.py'
+      - 'web/js/hex.mjs'
+      - 'pipeline/build/spatial.py'
+      - 'pipeline/__main__.py'
+      - 'tests/fixtures/synthetic/synthetic_gis_scene.json'
+      - 'tests/test_spatial.py'
+      - 'tests/js/spatial.test.mjs'
+      - 'docs/GIS_P04.md'
+      - 'docs/release/P04_G4_SYNTHETIC_ACCEPTANCE.md'
+      - '.github/workflows/p04-synthetic-gis.yml'
+  push:
+    paths:
+      - 'pipeline/core/geo.py'
+      - 'pipeline/core/hexgrid.py'
+      - 'web/js/hex.mjs'
+      - 'pipeline/build/spatial.py'
+      - 'pipeline/__main__.py'
+      - 'tests/fixtures/synthetic/synthetic_gis_scene.json'
+      - 'tests/test_spatial.py'
+      - 'tests/js/spatial.test.mjs'
+      - '.github/workflows/p04-synthetic-gis.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  gis-synthetic-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements-test.txt
+      - name: Python geometry, schema and historical contract tests
+        run: python -m unittest discover -s tests -v
+      - name: Browser hex grid and previous contract tests
+        run: node --test tests/js/*.test.mjs
+      - name: Build and validate fictional geometry
+        run: |
+          python -m pipeline spatial --workspace .p04-work
+          python -m pipeline spatial-check --workspace .p04-work
+          python -m pipeline spatial-benchmark --workspace .p04-work
+      - name: Verify deterministic output across rebuilds
+        run: |
+          find .p04-work -type f -name '*.json' -print0 | sort -z | xargs -0 sha256sum > /tmp/p04-before.sha256
+          python -m pipeline spatial --workspace .p04-work
+          python -m pipeline spatial-check --workspace .p04-work
+          find .p04-work -type f -name '*.json' -print0 | sort -z | xargs -0 sha256sum > /tmp/p04-after.sha256
+          diff -u /tmp/p04-before.sha256 /tmp/p04-after.sha256
+      - name: Ensure no real Shanghai GIS data is published
+        run: |
+          test ! -e web/data/world.json
+          test ! -e web/data/districts_geometry.json
+          python -c "import json; d=json.load(open('.p04-work/reports/p04_spatial_quality.json')); assert d['status']=='PASS' and d['p01_g1_status']=='BLOCKED' and d['public_map_release_approved'] is False"
