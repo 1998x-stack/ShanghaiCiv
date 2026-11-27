@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="上海文明地图开发实验：完全虚构的六边形地理空间场景，非真实上海地图。">
+  <title>ShanghaiCiv · Synthetic Map Laboratory</title>
+  <link rel="stylesheet" href="../css/synthetic-map.css">
+</head>
+<body>
+  <div class="app-shell" id="app" data-ready="false">
+    <aside class="side-panel" aria-label="原型工具与图层">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true">⬡</div>
+        <div>
+          <div class="brand">Shanghai<span>Civ</span></div>
+          <div class="brand-subtitle">CIVILIZATION DATA ATLAS</div>
+        </div>
+      </div>
+      <div class="notice">
+        <div class="notice-title"><span class="notice-dot"></span> SYNTHETIC LAB · P07</div>
+        <p><strong>虚构地图，仅供算法测试。</strong> 行政区、河流、海域、离岛均为人为设计，不代表上海真实地理或统计。</p>
+      </div>
+      <section class="panel-section">
+        <div class="section-kicker">WORLD EXPLORER</div>
+        <h2>地图控制</h2>
+        <label for="region-search" class="control-label">聚焦虚构区域</label>
+        <select id="region-search" aria-label="选择虚构区域">
+          <option value="">全部虚构区域</option>
+        </select>
+        <div class="button-pair">
+          <button type="button" id="reset-view" class="outline-btn">重置视角</button>
+          <button type="button" id="copy-link" class="outline-btn">复制视角链接</button>
+        </div>
+      </section>
+      <section class="panel-section">
+        <div class="section-kicker">MAP LAYERS</div>
+        <h2>渲染图层</h2>
+        <label class="toggle-row"><span><span class="legend-dot water"></span> 水域与陆地</span>
+          <input id="layer-terrain" type="checkbox" checked></label>
+        <label class="toggle-row"><span><span class="legend-dot lines"></span> 六边形格网</span>
+          <input id="layer-grid" type="checkbox" checked></label>
+        <label class="toggle-row"><span><span class="legend-dot borders"></span> 虚构行政区界</span>
+          <input id="layer-districts" type="checkbox" checked></label>
+        <label class="toggle-row"><span><span class="legend-dot partial"></span> 混合覆盖格标记</span>
+          <input id="layer-partial" type="checkbox" checked></label>
+      </section>
+      <section class="panel-section notes">
+        <div class="section-kicker">DATA PROVENANCE</div>
+        <h2>数据与限制</h2>
+        <p>来源：本仓库 P04 人工绘制的 JSON 合成场景。</p>
+        <a href="../../tests/fixtures/synthetic/synthetic_gis_scene.json" target="_blank" rel="noopener noreferrer">查看合成场景源文件 ↗</a>
+        <p class="muted">不加载天地图、商业底图、上海区界或真实人口/GDP。</p>
+      </section>
+      <div class="side-footer">P01/G1 真实地图授权门禁 <strong>BLOCKED</strong></div>
+    </aside>
+
+    <main class="map-column">
+      <header class="topbar">
+        <div class="topbar-main">
+          <span class="eyebrow">INTERACTIVE GEOMETRY PROTOTYPE</span>
+          <h1>虚构世界 <span>/ Synthetic World</span></h1>
+        </div>
+        <div class="status-pill" id="load-state" role="status" aria-live="polite">加载合成场景中…</div>
+      </header>
+      <div id="error-banner" class="error-banner" role="alert" hidden>
+        <strong>场景加载失败</strong>
+        <p id="error-detail">无法读取受控的合成地图数据。请检查本地 HTTP 服务与文件路径。</p>
+      </div>
+      <div class="map-viewport" id="map-viewport">
+        <canvas id="map-base" aria-hidden="true"></canvas>
+        <canvas id="map-interaction" tabindex="0"
+          aria-label="虚构六边形地图。方向键平移，加减号缩放，Enter 选择中心格；也可通过鼠标或触摸拖拽。"></canvas>
+        <div class="map-disclosure"><span class="disclosure-icon">●</span>
+          FICTIONAL DATA · NO REAL SHANGHAI GEOGRAPHY</div>
+        <div class="map-compass" aria-hidden="true">N <span>↑</span></div>
+        <div class="zoom-controls" aria-label="地图缩放">
+          <button type="button" id="zoom-in" aria-label="放大地图">+</button>
+          <button type="button" id="zoom-out" aria-label="缩小地图">−</button>
+        </div>
+        <div class="map-hint">拖动平移 · 滚轮缩放 · 点击查看单元</div>
+      </div>
+      <footer class="map-statusbar">
+        <div id="perf-line">尚未绘制</div>
+        <div id="camera-line">本地合成米制坐标</div>
+      </footer>
+    </main>
+
+    <aside class="inspector" aria-label="六边形单元信息">
+      <div class="section-kicker">HEX INSPECTOR</div>
+      <h2>空间单元</h2>
+      <p class="inspector-intro">点击六边形，检查面积覆盖比例与来源。<strong>不是人口或 GDP 的格网实测。</strong></p>
+      <div class="selected-id"><span>Cell ID</span><strong id="cell-id">—</strong></div>
+      <div class="stat-group">
+        <div class="stat-row"><span>陆地覆盖</span><strong id="land-value">—</strong></div>
+        <div class="fraction-track"><div id="land-bar" class="fill land" style="width:0"></div></div>
+        <div class="stat-row"><span>水域覆盖</span><strong id="water-value">—</strong></div>
+        <div class="fraction-track"><div id="water-bar" class="fill water" style="width:0"></div></div>
+        <div class="stat-row"><span>其他 / 未分类</span><strong id="outside-value">—</strong></div>
+        <div class="fraction-track"><div id="outside-bar" class="fill outside" style="width:0"></div></div>
+      </div>
+      <div class="meta-heading">行政区交集（合成）</div>
+      <div id="membership-list" class="membership-list">尚未选择单元。</div>
+      <div class="meta-heading">空间标签</div>
+      <div id="cell-tags" class="cell-tags"><span class="tag">Synthetic</span></div>
+      <div class="inspector-footer">
+        <span class="section-kicker">GEOMETRY CONTRACT</span>
+        <dl>
+          <div><dt>坐标系</dt><dd>SYNTHETIC_LOCAL_METERS</dd></div>
+          <div><dt>格网</dt><dd>Pointy-top / odd-r</dd></div>
+          <div><dt>统计精度</dt><dd>只有几何覆盖，不含人口经济</dd></div>
+          <div><dt>地图发布</dt><dd class="blocked">BLOCKED</dd></div>
+        </dl>
+      </div>
+    </aside>
+  </div>
+  <script type="module" src="../js/app/synthetic-map.mjs"></script>
+</body>
+</html>
