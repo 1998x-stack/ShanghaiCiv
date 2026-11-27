@@ -62,7 +62,8 @@ export function renderAlmanac({
   const focused=known.has(regionFocus)?regionFocus:members[0].region_id;
   summary.textContent="Cell #"+selected+" 跨越 "+members.length+" 个虚构区域；下列是完整区级数值，不是按覆盖比例分摊的格网值。";
   for(const member of members) {
-    const reg=bundle.regions.find(r=>r.id===member.region_id);
+    const reg=scene?.regions.find(r=>r.id===member.region_id)??
+      bundle.regions.find(r=>r.id===member.region_id);
     const metric=metricFor(bundle,lens.metric_id,member.region_id);
     const row=el("button","almanac-region"+(member.region_id===focused?" active":""));
     row.type="button";row.dataset.regionId=member.region_id;
