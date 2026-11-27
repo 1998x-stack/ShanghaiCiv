@@ -31,7 +31,7 @@ export function renderLensLegend(host,view) {
 }
 
 export function renderAlmanac({
-  bundles,year,lens,coverage,selected,regionFocus
+  bundles,year,lens,scene,coverage,selected,regionFocus
 },onFocus) {
   const summary=document.getElementById("almanac-summary");
   const regions=document.getElementById("almanac-regions");
