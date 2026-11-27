@@ -46,6 +46,25 @@
         <label class="toggle-row"><span><span class="legend-dot partial"></span> 混合覆盖格标记</span>
           <input id="layer-partial" type="checkbox" checked></label>
       </section>
+      <section class="panel-section thematic-controls" aria-label="虚构统计专题">
+        <div class="section-kicker">SYNTHETIC THEMATIC DATA</div>
+        <h2>统计专题 · 区级</h2>
+        <label for="metric-lens" class="control-label">选择虚构统计指标</label>
+        <select id="metric-lens" aria-label="选择区级专题">
+          <option value="none">不显示统计着色</option>
+        </select>
+        <label for="metric-year" class="control-label period-label">测试数据年份</label>
+        <select id="metric-year" aria-label="选择合成数据年份">
+          <option value="2024">2024（虚构数据）</option>
+          <option value="2025">2025（虚构数据）</option>
+        </select>
+        <div class="lens-notice" id="lens-notice">
+          只对虚构行政区面着色；不能解释为六边形人口或 GDP 实测。
+        </div>
+        <div class="lens-legend" id="lens-legend" aria-live="polite">
+          <span>暂无区级专题。</span>
+        </div>
+      </section>
       <section class="panel-section notes">
         <div class="section-kicker">DATA PROVENANCE</div>
         <h2>数据与限制</h2>
@@ -104,6 +123,25 @@
       <div id="membership-list" class="membership-list">尚未选择单元。</div>
       <div class="meta-heading">空间标签</div>
       <div id="cell-tags" class="cell-tags"><span class="tag">Synthetic</span></div>
+      <section class="almanac-section" aria-label="虚构区域统计与来源百科">
+        <div class="section-kicker">ALMANAC · AUDIT TRAIL</div>
+        <h2>统计与来源百科</h2>
+        <p class="almanac-warning">下列数字完全虚构，仅演示区级统计。一个 hex 可以跨多个区，数字不会分摊成 hex 实测。</p>
+        <div id="almanac-summary" class="almanac-summary" role="status" aria-live="polite">
+          请选择六边形以查看对应虚构行政区的区级指标。
+        </div>
+        <div id="almanac-regions" class="almanac-regions"></div>
+        <div class="meta-heading">跨期变化核验</div>
+        <div id="comparison-result" class="comparison-result">
+          只有双方存在可比值时显示合成差值；缺失值不当作零。
+        </div>
+        <div class="meta-heading">来源、方法与质量标记</div>
+        <div id="source-detail" class="source-detail">等待选择虚构区域。</div>
+        <div class="meta-heading">其他虚构估算指标</div>
+        <div id="zone-estimate" class="zone-estimate">
+          没有区属园区估算数据。
+        </div>
+      </section>
       <div class="inspector-footer">
         <span class="section-kicker">GEOMETRY CONTRACT</span>
         <dl>

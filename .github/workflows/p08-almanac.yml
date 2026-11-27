@@ -1,0 +1,70 @@
+name: P08 synthetic thematic Almanac browser E2E
+
+on:
+  pull_request:
+    paths:
+      - 'web/**'
+      - 'tests/js/almanac*'
+      - 'tests/fixtures/synthetic/**'
+      - 'docs/ALMANAC_P08.md'
+      - 'docs/release/P08_G5B_SYNTHETIC_ACCEPTANCE.md'
+      - 'README.md'
+      - '.github/workflows/p08-almanac.yml'
+  push:
+    paths:
+      - 'web/**'
+      - 'tests/js/almanac*'
+      - '.github/workflows/p08-almanac.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract-and-real-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install data contract schema validation
+        run: python -m pip install -r requirements-test.txt
+      - name: Build immutable fictional geometry and confirm G1 remains blocked
+        run: |
+          python -m pipeline spatial --workspace .p07-work
+          python -m pipeline spatial-check --workspace .p07-work
+      - name: Run all Python / JS semantic and geometry regressions
+        run: |
+          python -m unittest discover -s tests -v
+          node --test tests/js/*.test.mjs
+      - name: Install pinned Chromium-compatible browser harness
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          # ubuntu-24.04 hosted runner already includes Chromium runtime libraries.
+          # Avoid unrelated third-party apt repositories that may return HTTP 403.
+          npx playwright install chromium
+      - name: Run P07 and P08 real browser E2E
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/p08-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          node tests/js/synthetic-map.e2e.mjs
+          node tests/js/almanac.e2e.mjs
+      - name: Assert synthetic-only external-source and publishing gate
+        run: |
+          test ! -e web/data/world.json
+          test ! -e web/data/districts_geometry.json
+          test ! -e web/data/districts_2024_observations.json
+          python -c "import json; d=json.load(open('.p07-work/spatial/manifest.synthetic.json')); assert d['synthetic'] is True and d['p01_g1_status']=='BLOCKED' and d['public_map_release_approved'] is False"
+      - name: Upload synthetic desktop and mobile screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p08-synthetic-almanac-screenshots
+          path: artifacts/p08/*.png
+          if-no-files-found: ignore
+          retention-days: 7

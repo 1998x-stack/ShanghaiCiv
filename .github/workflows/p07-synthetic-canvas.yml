@@ -44,7 +44,9 @@ jobs:
       - name: Install pinned browser test harness
         run: |
           npm install --no-save --no-package-lock playwright@1.56.1
-          npx playwright install --with-deps chromium
+          # ubuntu-24.04 hosted runner already includes Chromium runtime libraries.
+          # Avoid unrelated third-party apt repositories that may return HTTP 403.
+          npx playwright install chromium
       - name: Run real Chromium desktop / touch-mobile E2E
         run: |
           python -m http.server 8765 --bind 127.0.0.1 >/tmp/p07-http.log 2>&1 &
