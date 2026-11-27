@@ -68,11 +68,14 @@ export function compareDistricts(view,leftId,rightId,metricId){
   const right=view.rows.find(x=>x.region_id===rightId);
   if(!left||!right)return {comparable:false,code:"MISSING_REGION",message:"区域 ID 无法匹配"};
   const a=left.metrics[metricId],b=right.metrics[metricId];
+  if(left.period!==right.period||left.period!==view.period)
+    return {comparable:false,code:"CROSS_PERIOD",message:"不允许拼接不同年份的区级值"};
   if(a.value===null||b.value===null)
     return {comparable:false,code:"MISSING_VALUE",message:"缺失值不可比较，也不能当作零"};
   if(a.unit!==b.unit||a.granularity!==b.granularity||
      a.status!==b.status||a.method_id!==b.method_id||
-     a.source_period!==b.source_period||a.license_status!==b.license_status)
+     a.source_period!==b.source_period||a.source_id!==b.source_id||
+     a.publisher!==b.publisher||a.license_status!==b.license_status)
     return {comparable:false,code:"INCOMPATIBLE_DEFINITION",message:"统计单位、方法、来源期或状态不兼容"};
   if(a.status==="estimated"||b.status==="estimated")
     return {comparable:false,code:"ESTIMATE_NOT_COMPARABLE",message:"模拟估计不参与直接对比"};
