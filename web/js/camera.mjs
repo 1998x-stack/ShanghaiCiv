@@ -2,7 +2,7 @@
 export class Camera {
   constructor() {
     this.width=1; this.height=1; this.centerX=0; this.centerY=0;
-    this.scale=1; this.minScale=0.045; this.maxScale=3.6;
+    this.scale=1; this.minScale=0.012; this.maxScale=3.6;
   }
   resize(width,height) {
     if(!Number.isFinite(width)||!Number.isFinite(height)||width<1||height<1)
