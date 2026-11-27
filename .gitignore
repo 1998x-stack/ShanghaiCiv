@@ -1,0 +1,15 @@
+# Local development and unapproved raw source data
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+node_modules/
+data/raw/
+data/interim/
+data/cache/
+data/credentials/
+.env
+.env.*
+!.env.example
+.DS_Store
+# Do not blanket-ignore web/data/: it must contain only signed-off publishable assets.
