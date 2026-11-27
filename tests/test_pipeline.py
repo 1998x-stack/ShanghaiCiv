@@ -113,6 +113,30 @@ class TestOfflinePipeline(unittest.TestCase):
         with self.assertRaisesRegex(PermissionError, "OFFLINE_NETWORK_REQUEST_BLOCKED"):
             fetch_http(info, self.work / "x.dat", offline=True)
 
+    def test_query_token_url_is_rejected_before_network(self):
+        info = SourceInfo(source_id="test", title="test", url="https://example.invalid/table?api_key=SECRET",
+                          publisher="test", reference_period="2024", native_granularity="district",
+                          license_status="allowed", redistribution_allowed=False)
+        with patch("urllib.request.urlopen") as opener:
+            with self.assertRaisesRegex(ValueError, "SOURCE_URL_CREDENTIALS_OR_QUERY_FORBIDDEN"):
+                fetch_http(info, self.work / "x.dat", offline=False)
+            opener.assert_not_called()
+
+    def test_interim_dataset_manifest_matches_schema(self):
+        try:
+            import jsonschema
+        except ImportError:
+            self.skipTest("Install requirements-test.txt for JSON Schema validation")
+        run("all", workspace=self.work)
+        root = Path(__file__).resolve().parents[1]
+        schema = json.loads((root / "schemas/dataset.schema.json").read_text())
+        validator = jsonschema.Draft202012Validator(schema)
+        for year in ("2024", "2025"):
+            path = self.work / "interim" / f"synthetic_{year}.manifest.json"
+            data = json.loads(path.read_text())
+            self.assertEqual(list(validator.iter_errors(data)), [])
+            self.assertEqual(data["reference_period"], year)
+
     def test_synthetic_source_cannot_publish(self):
         with self.assertRaisesRegex(PermissionError, "SYNTHETIC_PUBLIC_RELEASE_FORBIDDEN"):
             FixtureSource("2024").info.assert_access(public_release=True)
