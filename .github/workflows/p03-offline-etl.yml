@@ -7,6 +7,9 @@ on:
       - 'schemas/**'
       - 'tests/**'
       - 'docs/ETL_PIPELINE.md'
+      - 'docs/release/P03_G3_ACCEPTANCE.md'
+      - 'docs/IMPLEMENTATION_PLAN.md'
+      - 'README.md'
       - '.github/workflows/p03-offline-etl.yml'
   push:
     paths:
