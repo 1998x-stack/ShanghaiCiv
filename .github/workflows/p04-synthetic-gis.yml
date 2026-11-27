@@ -12,6 +12,9 @@ on:
       - 'tests/test_spatial.py'
       - 'tests/js/spatial.test.mjs'
       - 'docs/GIS_P04.md'
+      - 'schemas/spatial-coverage.schema.json'
+      - 'docs/IMPLEMENTATION_PLAN.md'
+      - 'README.md'
       - 'docs/release/P04_G4_SYNTHETIC_ACCEPTANCE.md'
       - '.github/workflows/p04-synthetic-gis.yml'
   push:
