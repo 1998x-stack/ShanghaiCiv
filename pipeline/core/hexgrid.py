@@ -81,6 +81,42 @@ class HexGrid:
                 out.append(self.index(c, r))
         return out
 
+    def vertices(self, col: int, row: int) -> tuple[tuple[float, float], ...]:
+        """Six pointy-top vertices in screen-coordinate (clockwise) order."""
+        cx, cy = self.center(col, row)
+        return tuple((cx + self.radius_m * math.cos(math.radians(-90 + 60 * k)),
+                      cy + self.radius_m * math.sin(math.radians(-90 + 60 * k)))
+                     for k in range(6))
+
+    def cell_bounds(self, col: int, row: int) -> tuple[float, float, float, float]:
+        cx, cy = self.center(col, row)
+        half_width = _SQRT3 * self.radius_m / 2
+        return cx - half_width, cy - self.radius_m, cx + half_width, cy + self.radius_m
+
+    def visible_cells(self, xmin: float, ymin: float, xmax: float, ymax: float) -> list[int]:
+        """Return sorted cells whose hex bounding rectangles intersect viewport.
+
+        A conservative screen cull: precise geometric intersection is left to
+        the overlay builder. Number of candidate cells scales with viewport.
+        """
+        if not all(math.isfinite(v) for v in (xmin, ymin, xmax, ymax)) or xmin > xmax or ymin > ymax:
+            raise ValueError("INVALID_VIEWPORT")
+        rad = self.radius_m
+        step_x = _SQRT3 * rad
+        row0 = max(0, math.ceil((ymin - self.origin_y_m - rad) / (1.5 * rad)))
+        row1 = min(self.rows - 1, math.floor((ymax - self.origin_y_m + rad) / (1.5 * rad)))
+        result: list[int] = []
+        for row in range(row0, row1 + 1):
+            cx_offset = self.origin_x_m + step_x * 0.5 * (row & 1)
+            half_x = step_x / 2
+            col0 = max(0, math.ceil((xmin - cx_offset - half_x) / step_x))
+            col1 = min(self.cols - 1, math.floor((xmax - cx_offset + half_x) / step_x))
+            for col in range(col0, col1 + 1):
+                x0, y0, x1, y1 = self.cell_bounds(col, row)
+                if x0 <= xmax and x1 >= xmin and y0 <= ymax and y1 >= ymin:
+                    result.append(self.index(col, row))
+        return result
+
     @classmethod
     def from_contract(cls, grid: dict) -> "HexGrid":
         return cls(radius_m=grid["radius_m"], cols=grid["cols"], rows=grid["rows"],
