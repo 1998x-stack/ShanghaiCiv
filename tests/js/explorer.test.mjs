@@ -110,7 +110,7 @@ test("guarded CSV includes explicit synthetic warning, provenance, null and no h
   assert(csv.includes('"FICTIONAL_FIXTURE"'));
   assert(csv.includes('"SYN-001"'));
   assert(csv.includes('"unavailable"'));
-  assert(csv.includes('"missing_value"'));
+  assert(csv.includes('"synthetic_fixture|missing_value"'));
   assert(csv.includes('"false"'));
   assert(!csv.includes("hex_cell"));
   const lines=csv.trim().replace(/^\uFEFF/,"").split("\r\n");
