@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/bundle.schema.json",
+  "title": "ShanghaiCiv bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release",
+    "sources",
+    "regions",
+    "metrics",
+    "lenses",
+    "world"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "release": {
+      "$ref": "release.schema.json"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "source.schema.json"
+      }
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "$ref": "region.schema.json"
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "$ref": "metric.schema.json"
+      }
+    },
+    "lenses": {
+      "type": "array",
+      "items": {
+        "$ref": "lens.schema.json"
+      }
+    },
+    "world": {
+      "$ref": "world.schema.json"
+    }
+  }
+}
