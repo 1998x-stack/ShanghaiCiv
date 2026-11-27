@@ -17,7 +17,7 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 **P03 工程验收记录**：[G3 验收报告](docs/release/P03_G3_ACCEPTANCE.md)，[GitHub Actions #45949933769](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45949933769) 已通过。范围仅合成数据离线 ETL，真实 GIS 和地图发布仍阻塞。
 
-## P04 空间叠合与合成 GIS（待 CI 验收）
+## P04 空间叠合与合成 GIS（工程验收通过）
 
 - [GIS 技术说明与限制](docs/GIS_P04.md) · [Python 几何库](pipeline/core/geo.py) · [空间构建器](pipeline/build/spatial.py)
 - 全部使用**虚构区界、虚构河道/海域/离岛**，不是上海现实地图；输出只写入 `.p04-work/`。
