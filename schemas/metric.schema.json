@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/metric.schema.json",
+  "title": "ShanghaiCiv metric v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metric_id",
+    "geography_id",
+    "granularity",
+    "value",
+    "unit",
+    "period",
+    "status",
+    "source_id",
+    "method_id",
+    "quality_flags"
+  ],
+  "properties": {
+    "metric_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "geography_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "granularity": {
+      "enum": [
+        "municipality",
+        "district",
+        "zone",
+        "hex_cell",
+        "facility"
+      ]
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "period": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "observed",
+        "derived",
+        "estimated",
+        "unavailable"
+      ]
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "method_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  }
+}
