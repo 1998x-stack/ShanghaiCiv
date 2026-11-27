@@ -114,7 +114,7 @@ class TestSyntheticGeometry(unittest.TestCase):
 
     def test_candidate_grid_sizes(self):
         rows = benchmark_grid_sizes((-1000,-700,8000,5200))
-        self.assertEqual([r["radius_m"] for r in rows],[250,500,1000])
+        self.assertEqual([r["radius_m"] for r in rows],[500,1000,2000])
         self.assertGreater(rows[0]["candidate_cells"],rows[1]["candidate_cells"])
         self.assertGreater(rows[1]["candidate_cells"],rows[2]["candidate_cells"])
 
