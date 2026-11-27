@@ -18,7 +18,8 @@
       "redistribution_allowed": true,
       "reference_period": "2025",
       "retrieved_at": null,
-      "sha256": null
+      "sha256": null,
+      "native_granularity": "district"
     }
   ],
   "regions": [
