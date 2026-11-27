@@ -15,4 +15,7 @@ data/credentials/
 # Do not blanket-ignore web/data/: it must contain only signed-off publishable assets.
 .p03-work/
 .p04-work/
+.p07-work/
+artifacts/
+
 data/build/

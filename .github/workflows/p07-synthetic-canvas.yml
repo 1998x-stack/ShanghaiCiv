@@ -1,0 +1,67 @@
+name: P07 synthetic Canvas browser and geometry E2E
+
+on:
+  pull_request:
+    paths:
+      - 'web/**'
+      - 'tests/js/**'
+      - 'tests/fixtures/synthetic/synthetic_gis_scene.json'
+      - 'docs/WEB_P07.md'
+      - 'docs/release/P07_G5_SYNTHETIC_ACCEPTANCE.md'
+      - 'README.md'
+      - '.github/workflows/p07-synthetic-canvas.yml'
+  push:
+    paths:
+      - 'web/**'
+      - 'tests/js/**'
+      - '.github/workflows/p07-synthetic-canvas.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  browser-and-cross-language:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python contract dependencies
+        run: python -m pip install -r requirements-test.txt
+      - name: Build P04 fictional geometry for independent parity checks
+        run: |
+          python -m pipeline spatial --workspace .p07-work
+          python -m pipeline spatial-check --workspace .p07-work
+      - name: Run Python / Node regression and geometry parity
+        run: |
+          python -m unittest discover -s tests -v
+          node --test tests/js/*.test.mjs
+      - name: Install pinned browser test harness
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run real Chromium desktop / touch-mobile E2E
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/p07-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          node tests/js/synthetic-map.e2e.mjs
+      - name: Fail closed for any real map publication
+        run: |
+          test ! -e web/data/world.json
+          test ! -e web/data/districts_geometry.json
+          test ! -e web/data/districts_2024_observations.json
+          python -c "import json; d=json.load(open('.p07-work/spatial/manifest.synthetic.json')); assert d['synthetic'] is True and d['public_map_release_approved'] is False and d['p01_g1_status']=='BLOCKED'"
+      - name: Upload fictional screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p07-synthetic-e2e-screenshots
+          path: artifacts/p07/*.png
+          if-no-files-found: ignore
+          retention-days: 7
