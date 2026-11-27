@@ -152,6 +152,52 @@ def clip_to_convex_polygon(subject: Sequence[Point], clipper: Sequence[Point]) -
     return tuple(output)
 
 
+def locate_point_in_ring(point: Point, vertices: Sequence[Point]) -> str:
+    """Return inside/boundary/outside for a simple ring (without its holes)."""
+    px, py = point
+    if not all(math.isfinite(v) for v in point):
+        raise ValueError("NONFINITE_COORDINATE")
+    vertices = ring(vertices)
+    crossings = False
+    for i, a in enumerate(vertices):
+        b = vertices[(i + 1) % len(vertices)]
+        c = _cross(a, b, point)
+        if (abs(c) <= EPSILON * max(1.0, abs(b[0] - a[0]), abs(b[1] - a[1]))
+                and min(a[0], b[0]) - EPSILON <= px <= max(a[0], b[0]) + EPSILON
+                and min(a[1], b[1]) - EPSILON <= py <= max(a[1], b[1]) + EPSILON):
+            return "boundary"
+        if (a[1] > py) != (b[1] > py):
+            x_intersect = a[0] + (py - a[1]) * (b[0] - a[0]) / (b[1] - a[1])
+            if x_intersect > px:
+                crossings = not crossings
+    return "inside" if crossings else "outside"
+
+
+def locate_point(point: Point, geometry: dict) -> str:
+    """Return point location in polygon/multipolygon; polygon holes are outside."""
+    on_boundary = False
+    for polygon in _polygons(geometry):
+        shell_result = locate_point_in_ring(point, polygon[0])
+        if shell_result == "outside":
+            continue
+        if shell_result == "boundary":
+            on_boundary = True
+            continue
+        in_hole = False
+        for hole in polygon[1:]:
+            loc = locate_point_in_ring(point, hole)
+            if loc == "boundary":
+                on_boundary = True
+                in_hole = True
+                break
+            if loc == "inside":
+                in_hole = True
+                break
+        if not in_hole:
+            return "inside"
+    return "boundary" if on_boundary else "outside"
+
+
 def intersection_area(geometry: dict, clipper: Sequence[Point]) -> float:
     """Area of Polygon/MultiPolygon with holes intersected by a convex hex.
 
