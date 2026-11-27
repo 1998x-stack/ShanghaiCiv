@@ -17,7 +17,9 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 **P03 工程验收记录**：[G3 验收报告](docs/release/P03_G3_ACCEPTANCE.md)，[GitHub Actions #45949933769](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45949933769) 已通过。范围仅合成数据离线 ETL，真实 GIS 和地图发布仍阻塞。
 
-## P10 区际 Explorer（待工程验收）
+## P10 区际 Explorer（合成工程验收通过）
+
+- [P10/G5d 正式验收报告](docs/release/P10_G5D_SYNTHETIC_ACCEPTANCE.md) · [Chromium 真实浏览器 E2E 与截图](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45962789826)。
 
 - [P10 区级比较、散点与来源导出文档](docs/EXPLORER_P10.md) · [纯函数数据合同](web/js/explorer.mjs) · [浏览器 E2E](tests/js/explorer.e2e.mjs)。
 - 在 [P07 地图页面](web/dev/synthetic-map.html) 的右侧 Inspector 增加 2024/2025 **合成行政区**排序、同年双区对比、双指标散点及合成 CSV。
