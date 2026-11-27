@@ -17,7 +17,7 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 **P03 工程验收记录**：[G3 验收报告](docs/release/P03_G3_ACCEPTANCE.md)，[GitHub Actions #45949933769](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45949933769) 已通过。范围仅合成数据离线 ETL，真实 GIS 和地图发布仍阻塞。
 
-## P07 交互式 Canvas 合成地图（开发中）
+## P07 交互式 Canvas 合成地图（已通过合成工程验收）
 
 - **本地演示**：在仓库根目录运行 `python -m http.server 8765 --bind 127.0.0.1`，打开 http://127.0.0.1:8765/web/dev/synthetic-map.html 。
 - [P07 浏览器架构与验收说明](docs/WEB_P07.md) · [HTML 交互原型](web/dev/synthetic-map.html) · [真实浏览器 E2E](tests/js/synthetic-map.e2e.mjs)。
