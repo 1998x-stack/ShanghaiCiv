@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/release.schema.json",
+  "title": "ShanghaiCiv release v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "build_id",
+    "data_vintage",
+    "synthetic",
+    "publish_approved",
+    "license_review"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "build_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_vintage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "publish_approved": {
+      "type": "boolean"
+    },
+    "license_review": {
+      "enum": [
+        "blocked",
+        "approved"
+      ]
+    }
+  }
+}
