@@ -3,6 +3,8 @@
 > **状态**：Architecture Proposal，尚未实现。数据合同待 P02 冻结；所有示例 JSON 都是 **synthetic contract examples**，不是上海真实统计数据。  
 > 关联：[PRD](./PRD.md) · [IMPLEMENTATION_PLAN](./IMPLEMENTATION_PLAN.md) · [DATA_CATALOG](./DATA_CATALOG.md)
 
+> **P02 已增补可运行的合同原型**（尚未代表 P02 验收通过）：[DATA_CONTRACTS v1](DATA_CONTRACTS.md)、[JSON Schemas](../schemas/bundle.schema.json)、[Python Validator](../pipeline/contracts.py)、[JS Validator](../web/js/contracts.mjs)、[Python Hex](../pipeline/core/hexgrid.py) / [JS Hex](../web/js/hex.mjs)。原先本文件 `3 的 JSON 示例是初期草案，后续正式语义以 DATA_CONTRACTS.md 和 schemas/ 为准；真实地图许可仍未确认。
+
 ## 1. 架构决策摘要
 
 | 维度 | 首选方案 | 备选/限制 |
