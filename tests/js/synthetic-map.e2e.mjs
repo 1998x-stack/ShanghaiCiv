@@ -50,11 +50,22 @@ try {
   // Drag must alter camera position, keyboard input must remain usable.
   const before=page.url();
   const box=await canvas.boundingBox();
+  await page.evaluate(() => {
+    window.__p07PointerLog = [];
+    const node=document.getElementById("map-interaction");
+    for(const type of ["pointerdown","pointermove","pointerup"]) {
+      node.addEventListener(type,e=>window.__p07PointerLog.push({
+        type, pointerId:e.pointerId, x:e.offsetX, y:e.offsetY,
+        target:e.target.id, buttons:e.buttons
+      }),{capture:true});
+    }
+  });
   await page.mouse.move(box.x+box.width*.55,box.y+box.height*.56);
   await page.mouse.down();
   await page.mouse.move(box.x+box.width*.65,box.y+box.height*.60,{steps:8});
   await page.mouse.up();
-  assert.notEqual(page.url(),before);
+  const pointerLog=await page.evaluate(()=>window.__p07PointerLog);
+  assert.notEqual(page.url(),before,"Drag did not persist camera: "+JSON.stringify(pointerLog));
   const afterDrag=page.url();
   await canvas.focus();
   await page.keyboard.press("ArrowRight");
