@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "disclosure": "ENTIRELY FICTIONAL GEOMETRY. No real Shanghai geography, waterway, island or administrative boundary.",
+  "canonical_crs": "SYNTHETIC_LOCAL_METERS",
+  "raw_crs": "SYNTHETIC_LOCAL_METERS",
+  "geometry_license_status": "synthetic",
+  "grid": {
+    "layout": "odd-r",
+    "orientation": "pointy",
+    "radius_m": 500,
+    "cols": 8,
+    "rows": 7,
+    "origin_x_m": 0,
+    "origin_y_m": 0
+  },
+  "regions": [
+    {
+      "id": "synthetic-district-a",
+      "name_zh": "虚构甲区",
+      "kind": "district",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -700,
+              -700
+            ],
+            [
+              3100,
+              -700
+            ],
+            [
+              3100,
+              3000
+            ],
+            [
+              -700,
+              3000
+            ],
+            [
+              -700,
+              -700
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "synthetic-district-b",
+      "name_zh": "虚构乙区",
+      "kind": "district",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                3300,
+                -700
+              ],
+              [
+                7600,
+                -700
+              ],
+              [
+                7600,
+                3000
+              ],
+              [
+                3300,
+                3000
+              ],
+              [
+                3300,
+                -700
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                4500,
+                3550
+              ],
+              [
+                5150,
+                3550
+              ],
+              [
+                5150,
+                4200
+              ],
+              [
+                4500,
+                4200
+              ],
+              [
+                4500,
+                3550
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "synthetic-river",
+      "kind": "water",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              3100,
+              -700
+            ],
+            [
+              3300,
+              -700
+            ],
+            [
+              3300,
+              3000
+            ],
+            [
+              3100,
+              3000
+            ],
+            [
+              3100,
+              -700
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "synthetic-sea-with-island-hole",
+      "kind": "water",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -1000,
+              3000
+            ],
+            [
+              8000,
+              3000
+            ],
+            [
+              8000,
+              5200
+            ],
+            [
+              -1000,
+              5200
+            ],
+            [
+              -1000,
+              3000
+            ]
+          ],
+          [
+            [
+              4500,
+              3550
+            ],
+            [
+              5150,
+              3550
+            ],
+            [
+              5150,
+              4200
+            ],
+            [
+              4500,
+              4200
+            ],
+            [
+              4500,
+              3550
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "note": "Two fictional land districts, one detached island of district B, a narrow river and sea polygon with an island hole. All locations are local synthetic metres."
+}
