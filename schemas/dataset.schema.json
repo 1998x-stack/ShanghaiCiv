@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/dataset.schema.json",
+  "title": "P03 isolated normalized dataset provenance v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "dataset_id",
+    "reference_period",
+    "revision_stage",
+    "native_granularity",
+    "license_status",
+    "redistribution_allowed",
+    "stage",
+    "synthetic",
+    "source_sha256",
+    "sha256",
+    "bytes",
+    "method"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference_period": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$"
+    },
+    "revision_stage": {
+      "enum": [
+        "synthetic",
+        "preliminary",
+        "final",
+        "revised"
+      ]
+    },
+    "native_granularity": {
+      "enum": [
+        "municipality",
+        "district",
+        "zone",
+        "hex_cell",
+        "facility"
+      ]
+    },
+    "license_status": {
+      "enum": [
+        "unknown",
+        "allowed",
+        "restricted",
+        "prohibited",
+        "synthetic"
+      ]
+    },
+    "redistribution_allowed": {
+      "type": "boolean"
+    },
+    "stage": {
+      "const": "interim"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "method": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
