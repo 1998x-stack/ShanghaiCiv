@@ -1,6 +1,8 @@
 import {Camera} from "../camera.mjs";
 import {assertSyntheticScene,buildSyntheticCoverage,geometryBounds} from "../synthetic-spatial.mjs";
 import {renderBase,renderOverlay,drawScalebar} from "../render/synthetic-canvas.mjs";
+import {assertSyntheticData,lensCatalog,districtMetricsView,SUPPORTED_PERIODS} from "../almanac.mjs";
+import {renderLensLegend,renderAlmanac} from "./almanac-ui.mjs";
 
 const $=id=>document.getElementById(id);
 const root=$("app"),viewport=$("map-viewport");
@@ -9,7 +11,25 @@ const baseCtx=baseCanvas.getContext("2d"),overlayCtx=overlayCanvas.getContext("2
 const camera=new Camera();
 const layers={terrain:true,grid:true,districts:true,partial:true};
 const sceneUrl=new URL("../../../tests/fixtures/synthetic/synthetic_gis_scene.json",import.meta.url);
+const vintageUrls=Object.fromEntries(SUPPORTED_PERIODS.map(year=>[
+  year,new URL("../../../tests/fixtures/synthetic/synthetic_"+year+".json",import.meta.url)
+]));
 let scene=null,coverage=null,selected=null,hovered=null,drag=null;
+let bundles=null,activeYear="2024",activeLens="lens-population",regionFocus=null;
+function currentLensView() {
+  if(!bundles||!scene||activeLens==="none")return null;
+  const lens=lensCatalog(bundles).find(l=>l.id===activeLens);
+  return lens?districtMetricsView(bundles[activeYear],lens,scene):null;
+}
+function refreshThematic() {
+  renderLensLegend($("lens-legend"),currentLensView());
+  const view=currentLensView();
+  $("lens-notice").textContent=view?
+    "区级区域着色 · "+view.observedCount+" 项有值 / "+
+    view.missingCount+" 项缺失。不是六边形实测。":
+    "关闭专题着色；仍可查看虚构几何覆盖。";
+  schedule(true);updateInspector();
+}
 let scheduled=false,baseDirty=true,pinchDistance=null;
 let visibleCells=0;
 const activePointers=new Map();
@@ -26,12 +46,20 @@ function saveHash() {
   p.set("x",s.x.toFixed(3));p.set("y",s.y.toFixed(3));p.set("z",s.z.toFixed(6));
   if(selected!==null)p.set("cell",String(selected));
   p.set("layers",Object.keys(layers).filter(k=>layers[k]).join(","));
+  p.set("year",activeYear);
+  p.set("lens",activeLens);
   history.replaceState(null,"",location.pathname+location.search+"#"+p.toString());
 }
 function restoreHash() {
   const p=new URLSearchParams(location.hash.replace(/^#/,""));
   if(p.has("x")&&p.has("y")&&p.has("z"))
     camera.restore({x:Number(p.get("x")),y:Number(p.get("y")),z:Number(p.get("z"))});
+  if(SUPPORTED_PERIODS.includes(p.get("year")))activeYear=p.get("year");
+  const requestedLens=p.get("lens");
+  if(requestedLens==="none"||lensCatalog(bundles).some(l=>l.id===requestedLens))
+    activeLens=requestedLens;
+  $("metric-year").value=activeYear;
+  $("metric-lens").value=activeLens;
   const id=p.get("cell");
   if(id!==null&&/^\d+$/.test(id)) {
     const n=Number(id);
@@ -59,6 +87,9 @@ function updateInspector() {
     }
     $("membership-list").textContent="尚未选择单元。";
     $("cell-tags").replaceChildren(tag("Synthetic"));
+    if(bundles)renderAlmanac({bundles,year:activeYear,
+      lens:currentLensView()?.lens??null,coverage,selected,regionFocus},
+      id=>{regionFocus=id;updateInspector();});
     return;
   }
   const cell=coverage.cells[selected];
@@ -82,13 +113,16 @@ function updateInspector() {
   if(cell.water_fraction>.05)labels.push(tag("含虚构水域"));
   if(cell.land_fraction>.05)labels.push(tag("含虚构陆地"));
   $("cell-tags").replaceChildren(...labels);
+  if(bundles)renderAlmanac({bundles,year:activeYear,
+    lens:currentLensView()?.lens??null,coverage,selected,regionFocus},
+    id=>{regionFocus=id;updateInspector();});
 }
 function draw() {
   scheduled=false;
   if(!coverage)return;
   const start=performance.now();
   if(baseDirty) {
-    visibleCells=renderBase(baseCtx,camera,coverage,scene,layers).visibleCells;
+    visibleCells=renderBase(baseCtx,camera,coverage,scene,layers,currentLensView()).visibleCells;
     baseDirty=false;
   }
   renderOverlay(overlayCtx,camera,coverage,{hovered,selected});
@@ -116,6 +150,7 @@ function resize() {
 function selectCell(id) {
   if(!coverage)return;
   selected=Number.isInteger(id)&&id>=0&&id<coverage.grid.size?id:null;
+  regionFocus=null;
   updateInspector();schedule();saveHash();
 }
 function canvasPoint(event) {
@@ -223,6 +258,17 @@ function wireControls() {
       layers[key]=event.target.checked;schedule(true);saveHash();
     });
   }
+  $("metric-lens").addEventListener("change",event=>{
+    activeLens=event.target.value;
+    if(activeLens!=="none"&&!lensCatalog(bundles).some(l=>l.id===activeLens))
+      activeLens="none";
+    refreshThematic();saveHash();
+  });
+  $("metric-year").addEventListener("change",event=>{
+    if(!SUPPORTED_PERIODS.includes(event.target.value))return;
+    activeYear=event.target.value;
+    refreshThematic();saveHash();
+  });
   $("region-search").addEventListener("change",event=>{
     const feature=scene?.regions.find(f=>f.id===event.target.value);
     if(!feature) {fitScene();return;}
@@ -246,16 +292,29 @@ function wireControls() {
   overlayCanvas.addEventListener("keydown",handleKey);
   window.addEventListener("hashchange",()=>{
     if(!coverage)return;
-    restoreHash();updateInspector();schedule(true);
+    restoreHash();refreshThematic();schedule(true);
   });
   new ResizeObserver(resize).observe(viewport);
 }
 async function main() {
   wireControls();resize();
   try {
-    const response=await fetch(sceneUrl,{cache:"no-store",credentials:"omit"});
+    const urls=[sceneUrl,...SUPPORTED_PERIODS.map(year=>vintageUrls[year])];
+    const responses=await Promise.all(urls.map(url=>fetch(url,{cache:"no-store",credentials:"omit"})));
+    for(const response of responses)if(!response.ok)throw new Error("HTTP "+response.status);
+    const [sceneJson,...bundleJsons]=await Promise.all(responses.map(response=>response.json()));
+    scene=assertSyntheticScene(sceneJson);
+    bundles=assertSyntheticData(Object.fromEntries(
+      SUPPORTED_PERIODS.map((period,i)=>[period,bundleJsons[i]])
+    ),scene);
+    for(const lens of lensCatalog(bundles)) {
+      const option=document.createElement("option");
+      option.value=lens.id;option.textContent=lens.title+" · 区级";
+      $("metric-lens").append(option);
+    }
+    $("metric-lens").value=activeLens;
+    const response=responses[0];
     if(!response.ok)throw new Error("HTTP "+response.status);
-    scene=assertSyntheticScene(await response.json());
     coverage=buildSyntheticCoverage(scene);
     for(const region of scene.regions) {
       const option=document.createElement("option");
