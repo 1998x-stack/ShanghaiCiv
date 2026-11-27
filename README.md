@@ -17,7 +17,9 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 **P03 工程验收记录**：[G3 验收报告](docs/release/P03_G3_ACCEPTANCE.md)，[GitHub Actions #45949933769](https://github.com/1998x-stack/ShanghaiCiv/actions/runs/45949933769) 已通过。范围仅合成数据离线 ETL，真实 GIS 和地图发布仍阻塞。
 
-## P08 合成专题与 Almanac 来源百科（待 CI 验收）
+## P08 合成专题与 Almanac 来源百科（工程验收通过）
+
+- [P08/G5b 合成验收报告](docs/release/P08_G5B_SYNTHETIC_ACCEPTANCE.md)，包含真实浏览器和 P02/P03/P04/P07 回归证据。
 
 - [P08 专题 / 数据口径 / 来源追溯文档](docs/ALMANAC_P08.md) · [专题计算逻辑](web/js/almanac.mjs)。
 - 在 [P07 本地交互原型](web/dev/synthetic-map.html) 增加 2024/2025 **虚构**人口和人口密度的区级专题着色、比较及来源百科，严格区分 `null`、实际零、派生和估算。
