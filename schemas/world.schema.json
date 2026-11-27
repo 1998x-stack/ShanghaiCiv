@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/world.schema.json",
+  "title": "ShanghaiCiv world v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection",
+    "grid",
+    "memberships"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "crs",
+        "units",
+        "axis",
+        "origin_x_m",
+        "origin_y_m"
+      ],
+      "properties": {
+        "crs": {
+          "type": "string",
+          "minLength": 1
+        },
+        "units": {
+          "const": "metre"
+        },
+        "axis": {
+          "const": "x-right-y-down"
+        },
+        "origin_x_m": {
+          "type": "number"
+        },
+        "origin_y_m": {
+          "type": "number"
+        }
+      }
+    },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout",
+        "orientation",
+        "radius_m",
+        "cols",
+        "rows",
+        "origin_x_m",
+        "origin_y_m"
+      ],
+      "properties": {
+        "layout": {
+          "const": "odd-r"
+        },
+        "orientation": {
+          "const": "pointy"
+        },
+        "radius_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cols": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "origin_x_m": {
+          "type": "number"
+        },
+        "origin_y_m": {
+          "type": "number"
+        }
+      }
+    },
+    "memberships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cell_id",
+          "region_id",
+          "fraction"
+        ],
+        "properties": {
+          "cell_id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "region_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fraction": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  }
+}

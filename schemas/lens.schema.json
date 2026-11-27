@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/lens.schema.json",
+  "title": "ShanghaiCiv lens v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "metric_id",
+    "granularity",
+    "scale"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metric_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "granularity": {
+      "enum": [
+        "municipality",
+        "district",
+        "zone",
+        "hex_cell",
+        "facility"
+      ]
+    },
+    "scale": {
+      "enum": [
+        "linear",
+        "log",
+        "quantile",
+        "category"
+      ]
+    },
+    "units_label": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

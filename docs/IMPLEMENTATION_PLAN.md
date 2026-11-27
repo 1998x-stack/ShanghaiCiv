@@ -93,6 +93,14 @@
 
 ---
 
+## P02 工程验收补充（2026-11-27）
+
+**P02 合成数据合同基线已完成**：7 份 JSON Schema、Python/JavaScript 语义校验、odd-r 格网算法、2 套 synthetic fixtures、跨语言/反例测试及 CI 均已交付；[G2 实际验收记录](release/P02_G2_ACCEPTANCE.md) 中 GitHub Actions Run #45947693507 的 semantic-and-schema 作业结论为 success。
+
+**注意范围**：dataset 独立注册、真实上海地理投影/几何、来源实际许可和 P03 ETL 不属于这个合成基线；P01/G1 仍 BLOCKED，不可据此开启真实地图公开发布。
+
+---
+
 ## P02｜领域模型、数据合同、口径和版本策略
 
 **目标**：先让 Python、浏览器、数据源说同一种语言。**投入级别**：M（2–4 工程日）。**负责人**：DE + GIS。

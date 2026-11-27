@@ -15,6 +15,16 @@ ShanghaiCiv 拟以真实地理、上海 16 区人口与经济、产业、交通�
 
 剩余外部事项：[#3 地图使用与审核](https://github.com/1998x-stack/ShanghaiCiv/issues/3) · [#4 统计使用许可与工业差额](https://github.com/1998x-stack/ShanghaiCiv/issues/4) · [#5 公共开放平台具体POI数据](https://github.com/1998x-stack/ShanghaiCiv/issues/5)。
 
+## P02 数据合同与合成空间引擎（阶段进行中）
+
+- [合同 v1 与统计口径规则](docs/DATA_CONTRACTS.md) · [游戏化指标方法（未启用）](docs/METRIC_METHODS.md)
+- [JSON Schemas](schemas/bundle.schema.json) · [Python 跨记录验证器](pipeline/contracts.py) · [JavaScript 验证器](web/js/contracts.mjs)
+- [Python 六边形算法](pipeline/core/hexgrid.py) · [JavaScript 镜像](web/js/hex.mjs)
+- [2024 虚构样本](tests/fixtures/synthetic/synthetic_2024.json) · [2025 虚构样本](tests/fixtures/synthetic/synthetic_2025.json)
+- 验证命令：`python -m scripts.validate_p02_contracts && python -m unittest discover -s tests -v && node --test tests/js/*.test.mjs`
+
+**P02 不包含真实上海行政边界或地图发布**：P01 的 G1 授权门禁仍处于 BLOCKED；测试用 5×4 虚构格网不对应现实坐标。
+
 ## 📚 文档导航
 
 | 文档 | 内容 | 用途 |

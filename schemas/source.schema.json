@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shanghaiciv.invalid/schemas/source.schema.json",
+  "title": "ShanghaiCiv source v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "publisher",
+    "url",
+    "license_status",
+    "redistribution_allowed",
+    "native_granularity"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "license_status": {
+      "enum": [
+        "unknown",
+        "allowed",
+        "restricted",
+        "prohibited",
+        "synthetic"
+      ]
+    },
+    "redistribution_allowed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reference_period": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "retrieved_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "native_granularity": {
+      "enum": [
+        "municipality",
+        "district",
+        "zone",
+        "hex_cell",
+        "facility"
+      ]
+    }
+  }
+}

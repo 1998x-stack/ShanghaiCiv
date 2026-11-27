@@ -1,0 +1,55 @@
+name: P02 contract and synthetic GIS checks
+
+on:
+  pull_request:
+    paths:
+      - 'schemas/**'
+      - 'pipeline/contracts.py'
+      - 'pipeline/core/hexgrid.py'
+      - 'web/js/contracts.mjs'
+      - 'web/js/hex.mjs'
+      - 'tests/**'
+      - 'scripts/validate_p02_contracts*'
+      - 'requirements-test.txt'
+      - '.github/workflows/p02-contracts.yml'
+  push:
+    paths:
+      - 'schemas/**'
+      - 'pipeline/contracts.py'
+      - 'pipeline/core/hexgrid.py'
+      - 'web/js/contracts.mjs'
+      - 'web/js/hex.mjs'
+      - 'tests/**'
+      - 'scripts/validate_p02_contracts*'
+      - 'requirements-test.txt'
+      - '.github/workflows/p02-contracts.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-and-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements-test.txt
+      - name: Validate Python research-only and synthetic contracts
+        run: |
+          python scripts/validate_p01_research.py
+          python -m scripts.validate_p02_contracts
+      - name: Cross-check Node semantic bundle validation
+        run: node scripts/validate_p02_contracts.mjs
+      - name: Python unit, Schema 2020-12 and cross-runtime tests
+        run: python -m unittest discover -s tests -v
+      - name: Node contract and hex tests
+        run: node --test tests/js/*.test.mjs
+      - name: No unapproved map data is bundled
+        run: |
+          test ! -e web/data/world.json
+          test ! -e web/data/districts_2024_observations.json
