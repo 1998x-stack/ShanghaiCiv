@@ -122,6 +122,12 @@
 
 ---
 
+## P03 工程验收补充（2026-11-27）
+
+已完成 P03 **synthetic-only ETL 基线**：[工作流与实现说明](ETL_PIPELINE.md) · [实际 G3 验收结果](release/P03_G3_ACCEPTANCE.md)。GitHub Actions 已验证 Source/fetch/process、SHA-256 manifest、Builder DAG、双年度合成数据、重复构建字节一致和权限门禁。**G3 工程部分通过**；真实官方统计来源导入、地图几何许可与 G1/G6 仍属于外部阻塞，不能依据本记录宣称可公开上海地图。
+
+---
+
 ## P03｜可复现数据源适配器与 ETL
 
 **目标**：合法源独立下载和标准化，离线构建可重复。**投入级别**：L（3–6 工程日，按格式复杂度调整）。**负责人**：DE + RE。

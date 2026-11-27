@@ -13,3 +13,5 @@ data/credentials/
 !.env.example
 .DS_Store
 # Do not blanket-ignore web/data/: it must contain only signed-off publishable assets.
+.p03-work/
+data/build/
