@@ -88,7 +88,7 @@ function updateInspector() {
     $("membership-list").textContent="尚未选择单元。";
     $("cell-tags").replaceChildren(tag("Synthetic"));
     if(bundles)renderAlmanac({bundles,year:activeYear,
-      lens:currentLensView()?.lens??null,coverage,selected,regionFocus},
+      lens:currentLensView()?.lens??null,scene,coverage,selected,regionFocus},
       id=>{regionFocus=id;updateInspector();});
     return;
   }
@@ -114,7 +114,7 @@ function updateInspector() {
   if(cell.land_fraction>.05)labels.push(tag("含虚构陆地"));
   $("cell-tags").replaceChildren(...labels);
   if(bundles)renderAlmanac({bundles,year:activeYear,
-    lens:currentLensView()?.lens??null,coverage,selected,regionFocus},
+    lens:currentLensView()?.lens??null,scene,coverage,selected,regionFocus},
     id=>{regionFocus=id;updateInspector();});
 }
 function draw() {
