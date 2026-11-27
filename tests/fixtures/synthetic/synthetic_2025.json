@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "release": {
+    "schema_version": 1,
+    "build_id": "synthetic-2025-p02",
+    "data_vintage": "2025",
+    "synthetic": true,
+    "publish_approved": false,
+    "license_review": "blocked"
+  },
+  "sources": [
+    {
+      "id": "SYN-001",
+      "title": "Synthetic contract test source",
+      "publisher": "ShanghaiCiv Test Suite",
+      "url": "https://example.invalid/synthetic",
+      "license_status": "synthetic",
+      "redistribution_allowed": true,
+      "reference_period": "2025",
+      "retrieved_at": null,
+      "sha256": null
+    }
+  ],
+  "regions": [
+    {
+      "id": "synthetic-city",
+      "name_zh": "虚构市",
+      "kind": "municipality",
+      "parent_id": null,
+      "code": null,
+      "geometry_ref": null
+    },
+    {
+      "id": "synthetic-district-a",
+      "name_zh": "测试区甲",
+      "kind": "district",
+      "parent_id": "synthetic-city",
+      "code": "SYN-A",
+      "geometry_ref": null
+    },
+    {
+      "id": "synthetic-district-b",
+      "name_zh": "测试区乙",
+      "kind": "district",
+      "parent_id": "synthetic-city",
+      "code": "SYN-B",
+      "geometry_ref": null
+    },
+    {
+      "id": "synthetic-zone-1",
+      "name_zh": "示例园区",
+      "kind": "zone",
+      "parent_id": "synthetic-district-a",
+      "code": null,
+      "geometry_ref": null
+    },
+    {
+      "id": "synthetic-zone-2",
+      "name_zh": "示例园区",
+      "kind": "zone",
+      "parent_id": "synthetic-district-b",
+      "code": null,
+      "geometry_ref": null
+    }
+  ],
+  "metrics": [
+    {
+      "metric_id": "population",
+      "geography_id": "synthetic-district-a",
+      "granularity": "district",
+      "value": 110000,
+      "unit": "persons",
+      "period": "2025",
+      "status": "observed",
+      "source_id": "SYN-001",
+      "method_id": null,
+      "quality_flags": [
+        "synthetic_fixture"
+      ]
+    },
+    {
+      "metric_id": "population",
+      "geography_id": "synthetic-district-b",
+      "granularity": "district",
+      "value": null,
+      "unit": "persons",
+      "period": "2025",
+      "status": "unavailable",
+      "source_id": "SYN-001",
+      "method_id": null,
+      "quality_flags": [
+        "synthetic_fixture",
+        "missing_value"
+      ]
+    },
+    {
+      "metric_id": "population_density",
+      "geography_id": "synthetic-district-a",
+      "granularity": "district",
+      "value": 1321,
+      "unit": "persons_per_km2",
+      "period": "2025",
+      "status": "derived",
+      "source_id": "SYN-001",
+      "method_id": "synthetic_population_divided_by_area",
+      "quality_flags": [
+        "synthetic_fixture"
+      ]
+    },
+    {
+      "metric_id": "population_density",
+      "geography_id": "synthetic-district-b",
+      "granularity": "district",
+      "value": null,
+      "unit": "persons_per_km2",
+      "period": "2025",
+      "status": "unavailable",
+      "source_id": "SYN-001",
+      "method_id": null,
+      "quality_flags": [
+        "synthetic_fixture",
+        "missing_value"
+      ]
+    }
+  ],
+  "lenses": [
+    {
+      "id": "lens-population",
+      "title": "虚构人口",
+      "metric_id": "population",
+      "granularity": "district",
+      "scale": "linear",
+      "units_label": "人"
+    },
+    {
+      "id": "lens-density",
+      "title": "虚构人口密度",
+      "metric_id": "population_density",
+      "granularity": "district",
+      "scale": "quantile",
+      "units_label": "人/平方公里"
+    }
+  ],
+  "world": {
+    "schema_version": 1,
+    "projection": {
+      "crs": "SYNTHETIC_LOCAL_METERS",
+      "units": "metre",
+      "axis": "x-right-y-down",
+      "origin_x_m": 0,
+      "origin_y_m": 0
+    },
+    "grid": {
+      "layout": "odd-r",
+      "orientation": "pointy",
+      "radius_m": 1000,
+      "cols": 5,
+      "rows": 4,
+      "origin_x_m": 0,
+      "origin_y_m": 0
+    },
+    "memberships": [
+      {
+        "cell_id": 0,
+        "region_id": "synthetic-district-a",
+        "fraction": 0.6
+      },
+      {
+        "cell_id": 0,
+        "region_id": "synthetic-district-b",
+        "fraction": 0.4
+      },
+      {
+        "cell_id": 6,
+        "region_id": "synthetic-district-b",
+        "fraction": 0.75
+      }
+    ]
+  }
+}
