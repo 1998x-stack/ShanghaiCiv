@@ -1,7 +1,7 @@
 # ShanghaiCiv P08｜区级专题图层与 Almanac 来源百科
 
 > **阶段**：P08 / Synthetic thematic MVP  
-> **状态**：开发中，工程验收以实际 CI 为准  
+> **状态**：G5b synthetic-only 工程验收通过；证据见 [P08/G5b 验收记录](release/P08_G5B_SYNTHETIC_ACCEPTANCE.md)。  
 > **数据性质**：**2024/2025 所有数字和地理边界均为虚构样本**，不能用于描述真实上海区级人口、工业或地理分布  
 > **独立门禁**：P01/G1 = **BLOCKED**（地图数据权利及公开地图审核）；真实统计再利用许可仍待确认
 
